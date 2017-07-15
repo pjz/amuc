@@ -1,0 +1,4 @@
+?package(amuc): needs="X11" section="Applications/Sound" \
+          title="Amuc" hints="Audio" \
+          longtitle="Amuc - the Amsterdam Music Composer" \
+          command="/usr/bin/amuc" icon="/usr/share/pixmaps/amuc-icon.png"

@@ -1,0 +1,38 @@
+set tempo:100
+# bass
+set black time:0,40.4,73 msynth:F5,00201,824,300,2040550,050,17770,0,078855,a3010,7
+# heavy
+set black time:33 msynth:F5,52200,703,006,6000000,430,15680,0,055805,44011,5
+# formant
+set black time:51 msynth:F5,00201,924,300,4040550,050,0aa70,0,088950,d2110,8
+# bell
+set black time:59 msynth:F5,70400,904,700,9030300,330,17021,0,055605,c5010,4
+# 2nd tender
+set blue time:0,90,104  msynth:F2_110,51000,4040001,340,17580,0,056805,7301,6
+set blue time:111       msynth:F2_110,51000,6040041,340,17580,0,056805,7301,5
+# strong piano
+set blue  time:49,96.4  msynth:F5,31000,110,306,8030000,330,17380,0,046804,94010,7
+# vibrant dual-tone
+set blue time:69,85     msynth:F2_315,11000,8030001,330,17380,0,046806,5501,7
+# clean dual-tone
+set blue time:77        msynth:F2_315,11000,8030001,330,17380,0,046806,5501,7
+# tender
+set brown time:0,90     msynth:F5,11000,510,500,7040101,340,17582,0,056805,73010,5
+# gong
+set brown time:73       msynth:F2_218,71165,6000120,400,29094,0,265806,7401,6
+# drums
+set green               msynth:F2_010,31000,6060000,004,25054,0,063804,4601,5
+# stereo location
+set black pan:L blue pan:R brown pan:R green pan:R
+
+add bass1 time:0,8,24,40,103
+add bass1b time:16
+add solo1 time:9,41
+add solo2 time:17
+add solo3 time:25,104
+add bass2 time:33
+add drums1 time:49
+add tune2 time:69
+add tune1 time:90
+add tune3 time:96
+

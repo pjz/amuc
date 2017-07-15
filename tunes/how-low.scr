@@ -1,0 +1,24 @@
+set tempo:100
+set red time:0,33 stw:5,3 suw:4,2 sa:2 su:3 dc:3 a:5 pan:L
+set red time:8.6,40.6 stw:4,3 suw:3,3 sa:2 su:2 a:6
+set black time:0 fm:0,4 dt:2 at:0 dc:2 mm:2,2 a:5
+set black time:57 fm:0,5 dt:0 at:0 dc:2 mm:0,0 a:4
+set brown time:0,104 fm:2,3 dt:3 at:0 dc:4 mm:0,0 a:5
+set brown time:90 fm:2,5 dc:4 mm:2,2 a:2
+set blue rich:off ch:on at:0 dc:3 a:6 pan:R
+set black phm:1,2,4,0
+set black wa:4 red wa:4 blue wa:4 green wa:4 purple wa:4 brown wa:4
+set red time:98 wa:5
+
+add bass1a
+add bass1 time:8,24,40,103
+add bass1 to:2.5 time:16
+add solo1 time:9,41
+add solo2 time:17
+add solo3 time:25,104
+add bass2 time:33
+add drums1 time:49
+add tune2 time:69
+add tune1 time:90
+add tune3 time:96
+

@@ -1,0 +1,40 @@
+# Haendel: organ concerto, opus 4, number 4
+set tempo:120
+out-par key:F
+set purple sth:3,0,0,1,2 suh:2,2,3,1,1 su:2 sound:1 a:4
+set brown eq:purple
+set red stw:4,3 suw:3,3 sa:2 su:0 dc:1 a:4
+out-par header:org-concerto.hd
+
+add organ1
+add organ2 time:6.8
+add organ3 time:12
+add organ4 time:15
+add organ5 time:21
+add organ6 time:26.8
+add organ7 time:32
+add organ8 time:34
+add organ9 time:41
+add organ10 time:47
+add organ11 time:53
+add organ12 time:59
+add organ13 time:65
+add organ14 time:69
+add organ15 time:76
+add organ16 time:80
+add organ17 time:86.8
+add organ18 time:93
+add organ19 time:100
+add organ1 from:0.8 time:102.8
+add strings1 time:0
+add strings2 time:20
+add strings3 time:30.8
+add strings4 time:38
+add strings5 time:50
+add strings6 time:53
+add strings7 time:59
+add strings8 time:65
+add strings9 time:69
+add strings10 time:78.8
+add strings11 time:100
+add strings1 time:102

@@ -1,0 +1,29 @@
+set tempo:110
+set brown fm:-1,5 dt:3 at:0 dc:3 mm:1,1 a:5 pan:L
+set red stw:4,4 suw:2,3 sa:1 su:3 dc:3 dl:0 tone:0 a:5 pan:L
+set green w1:3,2 w2:2,2 fr:1 attack:0 decay:1 ampl:5 time:89 fr:3 pan:R
+set green time:82 fr:2
+set purple sth:3,0,0,1,2 suh:2,3,3,1,1 su:2 sound:1 dc:2 ampl:5 pan:M
+#set black msynth:F2_010,61002,6060000,503,15074,0,165802,5411,8
+
+set black wf:10 time:0,21,72 wa:4 cpit:on span:L time:4,31 wa:2
+set red wf:10 time:0,21,72 wa:4 cpit:on span:R time:4,31 wa:2
+set blue wf:10 time:0,21,72 wa:3 cpit:on span:M time:4,31 wa:2
+set green wf:31 wa:3 cpit:on span:M
+set purple wf:33 wa:4 cpit:on span:L time:98 wf:30 wa:4
+set brown wf:35 wa:4 cpit:on span:R
+
+add up1 time:4
+add down1 time:15
+add up2 time:17
+add bass-up time:31
+add bass1 time:40
+add bass3 time:48
+add bass4 time:52
+add down1 time:57,63,70
+add down2 time:59
+add down3 time:65
+add up3 time:82
+add floating1 time:85
+add up4 time:89
+add drums time:0

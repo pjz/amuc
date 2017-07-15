@@ -1,0 +1,50 @@
+CC=g++
+MAKE_INC=Makefile.inc
+
+rm -f $MAKE_INC
+
+CFLAGS=""
+LDFLAGS=""
+okay=yes
+for LIB in x11 alsa xft cairo jack
+do
+  message=yes
+  echo -n "library $LIB ... "
+  if `pkg-config --exists $LIB`
+  then
+    CFLAGS=$CFLAGS\ `pkg-config --cflags $LIB`
+    LDFLAGS=$LDFLAGS\ `pkg-config --libs $LIB`
+  else
+    okay=no
+    message=no
+  fi
+  echo $message
+done
+if [ $okay = no ]; then echo "Some libraries are missing, exit."; exit; fi
+
+# compiler test
+echo -n "alsa version ... "
+cat > conftest.cpp <<!!
+#include <stdio.h>
+#include <alsa/asoundlib.h>
+int main() {
+  if (SND_LIB_MAJOR<1)
+    printf("%d.%d (should be 1.0 or higher)",SND_LIB_MAJOR,SND_LIB_MINOR);
+  else
+    puts("okay");
+}
+!!
+rm -f a.out
+$CC conftest.cpp -lasound
+okay=`./a.out`
+echo "$okay"
+rm -f a.out conftest.cpp
+if [ "$okay" != okay ]; then echo "Please upgrade alsa."; exit; fi
+
+echo "CFLAGS=$CFLAGS" > $MAKE_INC
+echo "LDFLAGS=$LDFLAGS" >> $MAKE_INC
+jack_min_version=`pkg-config --modversion jack | sed 's/0.\([0-9]*\).\([0-9]*\)/\1/'`
+echo "JACK_MIN_VERSION=$jack_min_version"  >> $MAKE_INC
+
+echo "File $MAKE_INC created."
+echo "Now run 'make', then 'make install' or 'make links'."

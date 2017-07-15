@@ -1,0 +1,47 @@
+set -e
+
+ADIR=$PWD/..
+BDIR=debian/usr/bin
+SDIR=debian/usr/share
+IDIR=$SDIR/amuc
+DDIR=$SDIR/doc/amuc
+
+if [ -d debian ]; then rm -r debian; fi
+mkdir debian debian/DEBIAN debian/usr $BDIR $SDIR $IDIR $SDIR/pixmaps \
+      $SDIR/menu $SDIR/lintian $SDIR/lintian/overrides $SDIR/applications \
+      $SDIR/man $SDIR/man/man1 $IDIR/amuc-tunes $IDIR/samples $SDIR/doc $DDIR
+
+cp $ADIR/src/amuc $ADIR/src-abcm2ps/abcm2ps $ADIR/src-wav2score/wav2score $ADIR/src-tr-sco/tr-sco $BDIR
+strip --remove-section=.comment --remove-section=.note $BDIR/*
+cp ../amuc.desktop $SDIR/applications
+cp control postinst postrm debian/DEBIAN
+cp copyright $DDIR
+
+cp changelog tmp
+echo "" >> tmp
+echo " -- W.Boeke <w.boeke@chello.nl>  `date +%F`" >> tmp
+cp tmp $DDIR/changelog.Debian
+
+cp ../amuc-icon.png ../amuc-icon.xpm $SDIR/pixmaps
+cp amuc-menu $SDIR/menu/amuc
+
+echo 'amuc: menu-icon-not-in-xpm-format
+      amuc: description-contains-homepage' > $SDIR/lintian/overrides/amuc
+
+cp $ADIR/samples/*.wav $IDIR/samples
+cp $ADIR/doc/* $SDIR/doc/amuc
+cp $ADIR/tunes/monosynth-patches $IDIR
+cp $ADIR/tunes/chords-and-scales $IDIR
+cp $ADIR/doc/amuc.1 $SDIR/man/man1/amuc.1
+cp $ADIR/src/dance.sc? $ADIR/tunes/rising.sc? $ADIR/tunes/how-low.sc? $ADIR/tunes/how-synth.sc? $IDIR/amuc-tunes
+cp $ADIR/tunes/org-concerto.sc? $ADIR/tunes/org-concerto.hd $IDIR/amuc-tunes
+
+gzip -9 -f $SDIR/man/man1/amuc.1 $SDIR/doc/amuc/changelog.Debian
+dpkg-deb --build debian
+if [ -z $USERNAME ]
+then
+  lintian --show-overrides debian.deb
+else
+  su $USERNAME -c 'lintian --show-overrides debian.deb'
+fi
+mv debian.deb amuc_1.7-1_i386.deb

@@ -1,0 +1,9 @@
+X:1
+T:Haendel - Concerto for Organ and Orchestra - opus 4 nr 4
+M:4/4
+L:1/16
+K:F
+%%staves [(13 14) 16 (4 5 6)]
+V:4 nm="Violins" clef=treble
+V:13 nm="Organo 1" clef=treble
+V:16 nm="Organo 2" clef=bass

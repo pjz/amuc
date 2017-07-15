@@ -1,0 +1,2141 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Amuc, the Amsterdam Music Composer</title>
+<style type="text/css">
+body {
+  background-color:#F0FFF0;
+  font-family:Verdana,"Luxi Sans";
+  font-size:12pt;
+}
+tt {
+  font-family:"Courier New",Monospace;
+  font-size:13pt;
+}
+pre {
+  font-family:"Courier New",Monospace;
+  font-size:13pt;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0px;
+  font-weight:inherit;
+  font-size:inherit;
+}
+td {
+  background-color:white;
+  border:solid thin grey;
+  font-weight:inherit;
+  vertical-align:top;
+}
+table.listing td {
+  padding-left:5px;
+}
+table.nob td {
+  border-style:none;
+  background-color:inherit;
+}
+table.opt-list {
+  width:70%;
+}
+table.opt-list td {
+  border:solid medium #E0FFE0;
+  background-color:white;
+}
+td.grey {
+  background-color:#e8e8ff;
+  font-family:"Courier New",Monospace;
+  font-weight:bold;
+  font-size:13pt;
+  white-space:nowrap;
+}
+td.grey1 {
+  background-color:#e8e8e8;
+}
+ul {
+  list-style-type:none;
+}
+ul li ul li {
+  font-size:smaller;
+}
+dl dt {
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+<center>
+<img src="amuc-title.png">
+<br>
+<i>Version 1.7</i><br>
+Wouter Boeke<br>
+<img src="mail-adr.gif">
+</center>
+Last updated: dec 1, 2008
+<h3>Contents</h3>
+<ul>
+<li><a href="#intro">Introduction</a>
+<li><a href="#panels">The GUI panels</a>
+  <ul>
+  <li>
+  <a href="#score panels">The 2 score panels</a><br>
+  <a href="#edit buttons">Score edit buttons</a><br>
+  <a href="#tunes panel">Tunes panel</a><br>
+  <a href="#meter panel">Meter panel</a><br>
+  <a href="#meter panel">Tempo panel</a><br>
+  <a href="#instr panel">The instrument control panels</a><br>
+  <a href="#reverb">Reverb</a><br>
+  <a href="#sampled">Sampled instruments</a><br>
+  <a href="#checkboxes">The checkboxes</a><br>
+  <a href="#menu panel">The menu panel</a><br>
+  <a href="#buttons right">Buttons at the right side</a><br>
+  <a href="#scope">Oscilloscope</a><br>
+  <a href="#script edit">Script editor</a><br>
+  <a href="#complete score">The complete score</a><br>
+  <a href="#zoom">Zoomed-out score view</a><br>
+  <a href="#keys">Scales and score keys</a><br>
+  <a href="#wave file">Export WAVE file</a><br>
+  <a href="#midi file">Export MIDI file</a><br>
+  <a href="#postscript file">Export postscript file</a><br>
+  <a href="#import midi">Import MIDI file</a>
+  </ul>
+<li><a href="#monosynth">Mono Synthesizer</a>
+<li><a href="#scripts">Scripts</a>
+<li><a href="#connect">MIDI controllers</a>
+  <ul><li>
+  <a href="#connect">Connecting a MIDI keyboard</a>
+  </ul>
+<li><a href="#comp tools">Companion tools</a>
+  <ul><li>
+  <a href="#wav2score">Wav2score - from wave file to score</a><br>
+  <a href="#abcm2ps">Abcm2ps - from ABC file to postscript</a><br>
+  <a href="#tr-sco">Tr-sco - transform a score file</a>
+  </ul>
+<li><a href="#issues">Issues</a>
+  <ul><li>
+  <a href="#issues">Scared of the command line?</a><br>
+  <a href="#hardw">Hardware requirements</a><br>
+  <a href="#the gui">The GUI</a><br>
+  <a href="#quality">Musical quality</a>
+  </ul>
+</ul>
+<a name="intro">
+<h1>Introduction</h1></a>
+Amuc is a program for composing music and playing it.
+From the command line the following command
+can be given, where the parameter is the name of a <i>score file</i>:
+<pre>   amuc dance.sco </pre>
+(This file is located in the src directory)<br>
+NB! If Amuc was installed by a package manager, with no source code,
+then all demo files are available in directory 
+/usr/share/amuc/amuc-tunes.
+If you don't know how to use a terminal, then read <a href="#issues">Scared of the command line?</a>
+<p>
+A score file contains
+short tunes that are to be combined into a complete piece of music.
+This combining is controlled by a <i>script file</i> which is a normal text file.
+After the script file <tt>dance.scr</tt> has been read the screen may look as follows.
+<p>
+<center><img src="amuc.png"></center>
+<p>
+After clicking the <b>play</b> button at the right, you can listen
+to this cheerful song.
+<p>
+It is also possible to read the script file directly, when no score file
+is loaded yet. If script
+file <tt>dance.scr</tt> is read, then first <tt>dance.sco</tt> will
+be loaded if it exists. The script file can be created or modified by the 
+built-in editor, or by an external editor.
+<p>
+If Amuc is started for the first time, then a default configuration file <tt>.amucrc</tt>
+is written to your HOME directory. The items in this file are hopefully self-explaining.
+A.o. you can choose where the sound must go: directly to your sound card using Alsa,
+or via Jack (the Jack Audio Connection Kit). In the latter case, Amuc tries to connect
+to the standard Alsa input ports: <tt>playback_1</tt> and <tt>playback_2</tt>. You could
+choose other ports, which is easily accomplished when using a Jack GUI-backend tool (e.g. qjackctl).
+<p>
+Amuc is quite different from other music software. It is especially focused on
+composing music, which is a very difficult but also rewarding endeavor.
+The tool tries to place as little hurdles as possible on the user's road.
+In general it's a good idea to run Amuc from the command line, and not by
+double-clicking its icon.
+For bigger projects it is convenient to first collect all
+relevant files in one directory and run Amuc from there.
+To create complicated pieces, or to create scores for the individual musicians 
+of an orchestra, you should know how to use a text editor and how to write shell scripts.
+<p>
+The entering of new tunes is done on normal 5-bar staffs (treble and bass clef) in
+one of the 2 panels at the left. There are 2
+kinds of instruments: sampled instruments and instruments whose waveforms
+are generated real-time. Fore each kind there is choice between 6 instruments,
+indicated by a color. All real-time instruments can be replaced by a Moog-like
+monophonic synthesizer.
+The sound of each instrument can be modified via
+its own control panel, that will appear when the appropriate color is selected.
+<p>
+The sampled instruments are created with a technique called
+"physical modeling", or alternativily their waveforms are read from files in WAVE format. In this
+case each sampled instrument can be tied to each of the available wave files.
+The pitch of sampled instruments can be controlled by the vertical position of their notes
+if a checkbox <b>controlled pitch</b> is enabled.
+<p>
+The characteristics of a real-time instrument are controlled by algorithms. So if you know how
+to program, then the creation of different
+sounds belongs to the possibilities. How Amuc is controlled will be explained
+in the next chapter via the panels and widgets of the graphical user interface.
+<p>
+Amuc can be run with several options. Run '<tt>amuc -h</tt>'
+to get a complete list, or run '<tt>man amuc</tt>'.
+
+<a name="panels">
+<h1>The GUI panels</h1></a>
+<a name="score panels">
+<h2>The 2 score panels</h2></a>
+Here you see a 5-bar staff in treble clef (the black lines) and in bass clef
+(the green lines). Note units can be entered by clicking the left mouse button.
+If a note is already present, then it will be erased, unless key <b>N</b> is pressed.
+In this case multiple notes can be inserted at the same location, they will
+be rendered in a grey color.
+If key <b>N</b> is not used, then long notes can be entered or erased by dragging the mouse.
+The color of the notes is determined by the color control panel (middle of the window).
+<p>
+If the middle mouse button is used,
+then the note will be staccato (indicated by a shortened display of the note).
+If the note is staccato already it will be turned back to normal.
+<p>
+Middle-C, which is a note on the line between the black and the green score lines,
+will have a frequency of 130.8Hz (which is half of the usual value 261.8Hz).
+<p>
+Notes from sampled instruments are created if the <b>sampled notes</b> checkbox is
+enabled. The control panel for all sampled instruments is the same: 2 two-dimensional
+sliders controlling values called speed, tension, decay and amplitude.
+The default values for these instruments are different however. Sampled notes
+are indicated by colored crosses. Their vertical position in the score panel is relevant
+only if checkbox <b>controlled pitch</b> is enabled.
+<p>
+The control panel for a sampled instrument contains a choice box. If the <b>wave file</b>
+item is choosen, then the waveforms for the sampled sounds are read from 
+files. A menu widget is provided, if clicked then the available sampled
+instruments will be listed. The names of wave files in the current directory are
+rendered in black, the files in <tt>/usr/share/amuc/samples</tt> in blue.
+For details see chapter <a href="#sampled">Sampled Instruments</a>.
+Notice that these
+files are read if the score at the bottom
+is played and they are needed for the first time. So if only tunes with
+real-time instruments are played then the wave files will not be loaded.
+<p>
+Clicking the right mouse button will create a vertical 'end-of-tune'
+line. This will be useful when several tunes are combined later on, because then
+no timing information will have to be specified in the script file.
+Also, this way the length of a tune can be increased beyond its initial value.
+To accomplish this, click with the right mouse button in the white space
+at the right from the score lines.
+<p>
+One score panel can be the active score, which is
+controlled by the <b>active</b> button.
+If this button is clicked once more, then none of the scores will be active.
+The status of the <b>active</b> button is relevant for several different
+operations, thus it can be harmful if it is enabled inadvertantly.
+Therefore it is always reset after being used. If you don't want this,
+you can keep the status
+by pressing the shift key before clicking a button or slider.
+<p>
+The tune in the score is sounded by clicking the <b>play</b> button of the score panel.
+It can be stopped by the <b>stop</b> at the right of the window.
+It is possible to indicate the starting and stopping times of the
+playback. This is done by clicking the left and right mouse buttons
+respectivily, above the highest score line, and is indicated by small red triangles.
+They can be undone by clicking at the same point a 2nd time, or by clicking the
+middle mouse button.
+<p>
+After enabling checkbox <b>zoom</b> a zoomed-out view of the tune
+will appear. In this window small note delays can be introduced. See the
+<a href="#zoom">zoom window</a> chapter.
+<p>
+If the <b>repeat</b> checkbox is enabled, the tune until the 'end-of-tune' line
+will be repeated. This also works between the red triangle start/stop signs. The repeating
+can be stopped with the <b>stop</b> button.
+<p>
+If the checkbox <b>play 1 color</b> is enabled, then a single instrument will sound: the one
+that has been choosen in the panel labeled <b>colors</b> (middle right).
+<p>
+With the choice button called <b>display</b> the appearance of
+the display can be modified. Normally the mode <b>instrument</b>
+is enabled. Other display modes:
+<ul>
+<li><b>timing</b>: modified start- or end delays are drawn in
+red and blue. Unmodified notes are drawn in grey.<br>
+<li><b>accidentals</b>: accidental notes are colored: red for accidental sharp,
+blue for accidental flat, black for restored.<br>
+<li><b>white keys</b>: no regular scores, but a piano-roll display.
+Dotted grey lines indicate the white
+keys of a piano keyboard. A score in this mode is too big for its window, so only the upper
+part is shown. If the button is clicked a second time, then the lower part appears.
+<br>
+Sometimes it is useful to display the same tune in both score windows, one of them
+in white keys mode.
+<br>
+Not only the white piano keys can be shown, also many different scales and chords, which is meant as
+an aid for the inexperienced composer. See chapter <a href="#keys">Scales and score keys</a>.
+</ul>
+<p>
+Choice button <b>gr#</b> (which means 'group number') is relevant for
+MIDI output and for generated human-readable scores (in postscript format). A tune can belong to
+1 of 3 'groups'. Each group can be mapped to different MIDI instruments
+or to different staves in the postscript picture. See <a href="#midi file">Export MIDI file</a>
+or  <a href="#postscript file">Export postscript file</a>.
+<p>
+Usually, musical scores are preceeded by 'flat' or 'sharp' key signatures, depending on the
+key in which the piece is written. The key signatures are drawn in front
+of the score lines, see chapter <a href="#keys">Scales and score keys</a>.
+If a note is entered on such a line it will be raised or lowered one semitone by default.
+<p>
+The color of a new entered note is determined by the <b>colors</b> panel.
+<p>
+The action performed by clicking or dragging the left mouse button can be modified
+by the buttons at the left side, see the next chapter.
+
+<a name="edit buttons">
+<h2>Score edit buttons</h2></a>
+The blue buttons have immediate effect. From the choice buttons, none or one
+can be enabled at the same time. A choice button can be reset by clicking it again.
+Most buttons have key equivalents (indicated by an underscore in the button label),
+which you normally will be using, however using the buttons you can work single-handed.
+The key must be pressed before clicking the mouse.
+<dl>
+<dt>select<dd>
+If this button is enabled, then
+clicking somewhere on a note will select the parts of the note extending
+to the right. Clicking on an already selected part will de-select it.
+Selected note parts will get a lighter color.
+<p>
+Clicking outside a note will select all note parts under and above the clicked
+location. By dragging the mouse an area of selected notes will be created.
+<p>
+Selected note parts can be moved, copied, deleted or re-colored.
+Notice that the <b>select</b> button stays active after the mouse button has
+been released, whereas the other buttens will be reset in this case.
+<dt>sel color<dd>
+All note parts of one color (as selected in the color panel) under and above the clicked
+location will be selected. By dragging the mouse an area of selected notes is created.
+<p>
+The operation of other buttons on selected mutiple notes is different if <b>sel color</b>
+has been used instead of <b>select</b>. In the first case, e.g. clicking the
+<b>delete</b> button would only remove from the multiple note the selected color. In the
+second case the complete multiple note would be removed.
+<p>
+<dt>sel all -><dd>
+All notes in the clicked score to the right of the cursor will be selected,
+except notes to the right of the end-of-score line if it exists.
+<p>
+<dt>sel col -><dd>
+Same as <b>sel all -></b>, but only 1 color (as selected in the color panel)
+is selected. Notice that, if a multiple note contains the selected color,
+this will be moved to the front. This is relevant because some operations
+only affect the front note of a multiple note.
+<p>
+<dt>move<dd>
+If this button is enabled, then the selected note parts can be moved
+in a horizontal or vertical direction, by clicking and dragging the left
+mouse button.
+<p>
+If notes are moved in vertical direction, then their sign (flat or sharp)
+is not retained, it will instead be equal to the
+key signature of the new score line.
+Notice that if a selected note is moved to a position
+beneath or above the valid score area, it will be lost.
+<p>
+When clicking in a score different from the score where the selected notes
+are, then initially the left-most moved note will appear at the mouse position
+in the new score.
+<p>
+If the <b>K</b> key is pressed before releasing the mouse button, then
+the moving will not occur (<b>K</b> means 'keep').
+<p>
+<dt>copy<dd>
+If this button is enabled, then the selected note parts can be copied
+in a horizontal or vertical direction, by clicking and dragging the left
+mouse button.
+The copied notes will be the new selection.
+<p>
+When clicking in a score different from the score where the selected notes
+are, then initially the left-most copied note will be at the mouse position.
+<p>
+Again, if the <b>K</b> key is pressed before releasing the mouse button, then
+the copying will not occur.
+<p>
+<dt>portando<dd>
+Portando means sliding from one note to the next.
+Portando is indicated by a slanting line between 2 notes, that must be of the
+same color.
+If this button is enabled, then:
+<ul>
+<li>If the cursor is on a note, the cursor shape becomes a square. Then the
+mouse can be dragged, the cursor becomes a cross. If the cursor reaches another
+note, the cursor again becomes a square. If the mouse is released at that
+moment, then a line is drawn from the first note to the second.<br>
+<li>If the cursor is on a note which is the start of a portando line, then the
+line is omitted.<br>
+<li>If the cursor is not on a note, then nothing happens.
+</ul>
+<p>
+Notice that the portando data are stored in the first note, which will be apparent
+when this one is moved or deleted.
+If 2 notes are in portando, then during playback the decay part of the first
+and the attack part of the second are skipped.
+The horizontal distance (in note units) between the first and second note can be between 0 and 15,
+the vertical distance between -31 and +31.
+<p>
+<dt>multi-n<dd>
+Enables the insertion of differently colored notes at the same place.
+Multi-colored notes are rendered in grey. Notice that
+the sign of the new note will be copied from the sign of the first note.
+<p>
+<dt>sharp
+<dt>flat<dd>
+When one of these buttons is enabled then a clicked note 
+will be sharp or flat respectivily, indicated by small upward or downward peaks on the note.
+The up- respectively down arrow keys have the same effect.
+<p>
+Notice that normal notes that differ one semitone are treated specially.
+For instance a B note that is made sharp will turn into a C note.
+<p>
+<dt>normal<dd>
+When this button is enabled, notes can be set back from sharp or flat to normal.
+Pressing the left arrow key has similar effect.
+<p>
+<dt>note info<dd>
+When this button is enabled, then clicking on a note has the effect that
+information about the note is displayed in an alert window. This also works
+for multiple notes. Notes in the score at the bottom will show also the
+name of the tune where they came from.
+</dl>
+Whereas the previous buttons determine what happens when clicking in a score panel,
+the following 3 + 4 buttons have immediate effect on the selected notes.
+<dl>
+<dt>unselect<dd>
+The label of button turns to red if any notes have been selected.
+After clicking, these will become unselected. You also can
+press the <b>U</b> key and then click in the score with selected notes.
+<p>
+<dt>re-color<dd>
+Clicking this button will have the effect
+that selected note parts will get the color as choosen in the color panel.
+<p>
+<dt>delete<dd>
+After clicking, all selected notes will be gone.
+<p>
+<dt>shift<dd>
+Selected notes will be shifted up or down by the number of semi-tones, as indicated by
+slider <b>shift/cp</b>.
+<p>
+<dt>copy<dd>
+Selected notes will be copied up or down by the number of semi-tones.
+</dl>
+
+<a name="tunes panel">
+<h2>Tunes panel</h2></a>
+This panel shows a list of all tunes in memory. A tune can be displayed
+by making one of the scores active before selecting the tune. A new tune
+can be added by pressing the <b>new...</b> button and specifying a name via the dialog
+panel (middle right).
+
+<a name="meter panel">
+<h2>Meter panel</h2></a>
+Controls the number of note units between the dotted vertical bars in the scores.
+<p>
+The meter of some tune also can have a value different from the default meter. To accomplish
+this first make one score panel active before modifying the meter slider.
+The complete score always has the default meter.
+
+<h2>Tempo panel</h2>
+This controls the duration of the notes. The displayed value is the number
+of beats per minute, where 1 beat = 4 note units.
+
+<a name="instr panel">
+<h2>The instrument control panels</h2></a>
+When a color is choosen, and the <b>sampled notes</b> checkbox is
+off, then the control panel of the appropriate instrument will
+appear. The instruments have not been designed to imitate existing
+instruments. They should provide nice and versatile sounds that have
+a specific character of their own.
+The characteristics of the real-time instruments are as follows.
+<p>
+<table>
+<tr>
+<td class="grey1">Instrument
+<td class="grey1"><center>Description</center>
+</tr>
+<tr>
+<td class="grey">black<br>brown
+<td>An FM instrument, like the Yamaha DX7. The basic sinus signal
+can be FM modulated with 0.5 to 8 times the basic frequency.
+The modulation index can be choosen between 0 and 10.
+Both frequency and index are controlled with a two-dimensional slider.
+The modulation index can be either an integer or a value of 0.5 (which yields
+a fundamental frequency 1 octave lower). Detuning the modulation
+frequency can be done with the <b>detune</b> slider. The modulation index can
+itself be modulated with a low-frequency signal, with controllable amount and
+frequency. A wide range of sounds is provided, from mellow to pregnant.
+</tr>
+<tr>
+<td class="grey">red
+<td>The waveform is a repeating pattern consisting of 2, 3 or 5 cycles 
+(with varying frequency) of a sinus wave.
+This yields a frequency spectrum with a wide range of upper harmonics.
+The number of cycles as well as the frequency variation within one cycle are controlled
+with 2 two-dimensional sliders labeled <b>diff/nrsin</b>, one for the startup,
+one for the sustain part of a note. With slider <b>start-amp</b> the amplitude at
+startup is controlled. With radio-button <b>tone</b> a doubled frequency can be mixed
+in, which enhances audibility of low-frequency notes.
+This instrument can sound like a rough piano, a guitar or a bass-guitar.
+</tr>
+<tr>
+<td class="grey">green
+<td>Two waveforms as used for the red instrument are combined. The ratio of their frequencies
+can be choosen between 1 and 3. A chorus effect is created by a controllable detuning
+of the 2 waves. Beautiful sound.
+</tr>
+<tr>
+<td class="grey">blue
+<td>Basicly a pulse. If the <b>chorus</b> checkbox is enabled,
+then a second pulse with a slightly different frequency is added with the opposite
+amplitude. The 2 signals cannot fully cancel each other, because they
+are asymmetric. With the <b>rich tone</b> checkbox, pulses with 2 and 3 times the
+basic frequency are added. Also a slider <b>lowpass</b> is provided. At higher values
+of this control it does not act like a real lowpass filter, more like a formant shaper.
+A limit on the duration of a note can be set with
+slider <b>dur limit</b> (dur = duration), which is useful if long notes have been generated from MIDI input.
+This instrument can have a pure, floating quality, or a full rich sound like a piano if
+chorus as well as rich tone are enabled. Notice that if the duration limit is different from zero,
+then staccato notes will sound like normal notes.
+</tr>
+<tr>
+<td class="grey">purple
+<td>An additive synthesis instrument, like a Hammond organ. The sound is the sum
+of sinus waves with a frequency of 1, 2, 3, 6 or 9 times the fundamental,
+with separate controls for these harmonics during startup and sustain.
+Duration of the startup is controllable. A slight distorsion in the time domain
+can be added, which also can be modulated with a low frequency.
+This instrument can sound very nice and mellow, or somewhat harsh.
+</tr>
+</table>
+<p>
+Instruments can act 2 ways: with their "native" sound, or as a monophonic
+synthesizer. Their control panel contains a box with choice <b>native</b> or <b>msynth</b>.
+If the latter is enabled then a control panel with a lot of sliders pops up. See chapter
+<a href="#monosynth">Mono Synthesizer</a>.
+<p>
+All instruments have stereo sound. The stereo effect is created by delaying one
+channel with 2 msec and decreasing its amplitude to 50%. Panning between left and
+right channels can be controlled by script command <tt>pan:LL</tt>, <tt>pan:L</tt>, etc.
+<p>
+Each instrument can sound like one of the other instruments, using a button labeled <b>eq?</b>.
+This is indicated by a colored line at the left side of the control panel. Repeated clicking
+has the effect of cycling through the 6 different instrument colors. Notice that the amplitude
+control of an instrument is done by its own slider.
+
+<a name="reverb">
+<h2>Reverb</h2></a>
+One instrument can have reverberation. The <b>reverb</b> panel
+contains a button <b>instr?</b> that when clicked cycles through the
+6 instrument colors. The horizontal value of the slider controls the amount of reverberation plus the "wetness",
+which is the ratio of direct sound and delayed sound. The displayed value e.g. might be
+'0.5 long', which means: the ratio of the delayed and the direct sound is 1 to 1, the delay is long.
+If the vertical value of the slider is set to 1 or 2, then a phasing effect will be added.
+<p>
+Sounds with a very short attack time don't sound good with reverberation.
+
+<a name="sampled">
+<h2>Sampled instruments</h2></a>
+If the <b>sampled notes</b> checkbox is enabled, then a control panel of a sampled instrument
+will appear. There are 2 modes, which can be choosen with the <b>samples</b> choice box.
+In the first mode, the sounds are synthesized via a technique called "physical
+modeling". The models are relatively simple, so the modification of parameters
+can be performed in realtime.
+<p>
+In the second mode, sounds are read from files in WAVE format. The wave files are
+read from the current directory or from <tt>/usr/share/amuc/samples</tt>. This search path
+can be altered by a script command <tt>sample-dir:</tt>, see the <a href="#scripts">Scripts</a>
+chapter.
+A wave file name must start with a number, and end with the extension '.wav'.
+The number of channels must be 1 (mono), the sampling rate must be 44100 Hz.
+<p>
+Of course you can use other files if you don't like the ones provided.
+All kind of sounds can be used, for instance samples from real instruments or from human voices.
+<p>
+The control panels look as follows:
+
+<table class="nob">
+<tr>
+<td><b>Physical model:</td>
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td><b>Wave file:</td>
+<tr>
+<td>&nbsp;<br>&nbsp;<br><img src="sampled-phys.png"></td>
+<td></td>
+<td><img src="sampled-wave.png"></td>
+</tr>
+</table>
+<p>
+In wave file mode, clicking the arrow-button will open a menu with wave file names.
+The text is colored: black when found in the current directory, blue when found in
+<tt>/usr/share/amuc/samples</tt>, else green. Notice that the list of wave files
+is stored internally when they are needed for the first time, and that this list
+is not refreshed automatically after a modification. That is what button 
+<b>rescan wave files</b> is for.
+<p>
+Sampled sounds can be heard 2 ways, dependent of the status of checkbox <b>controlled pitch</b>.
+If this checkbox is off, then the pitch of the sound is independent of the score line where
+the note was drawn. If the checkbox is enabled, then the pitch is dependent of the score line.
+The reference line, where the pitch is the original one, is middle-C (which is the score line between
+the upper and the lower staff). Only the sampling speed is modified, so increasing pitch yields
+a shorter duration.
+<p>
+If checkbox <b>just listen</b> is enabled, then you will hear the sound from the wave file
+when clicking its name. The sound of the instrument will not be modified however, and the menu will
+stay on-screen.
+
+<a name="checkboxes">
+<h2>Central checkboxes and buttons</h2></a>
+Their functions are described elsewere. A short summary:
+<dl>
+<dt>score keys
+<dd>Opens the <a href="#keys">Scales and score keys</a> window.</dd>
+<dt>sampled notes
+<dd>Notes entered in a score panel will be of the sampled kind.</dd>
+<dt>ignore set cmd's
+<dd>When the score at the bottom is played, then script  <b>set</b> commands (which control the instrument sounds)
+are in effect. If you don't want this, then check this button.</dd>
+<dt>connect MIDI keyboard
+<dd>See chapter <a href="#connect">MIDI keyboard</a>.</dd>
+</dl>
+<p>
+
+<a name="menu panel">
+<h2>The menu panel</h2></a>
+This contains 3 menus.
+<dl>
+<dt>File<dd>
+This menu looks as follows:<br>
+<center><img src="file-menu.png"></center>
+As can be seen, the dialog panel sometimes is augmented with a small black triangle,
+indicating that there is a choice menu available. The File menu contains the following items:
+<p>
+  <dl>
+  <dt>load score file...<dd>
+Enables loading of a score file. In the dialog
+panel (middle right) a file name must be specified. If you started Amuc by double-clicking
+its icon, then the path to the file is relative to your home directory. If started
+from the command line, the path is relative to the current directory.
+<p>
+After clicking the small <b>ok</b> button or hitting the enter key, the file will
+be read. A list of available .sco files will appear if the black triangle is clicked.
+This list will disappear if an item is clicked, or if the black triangle is clicked
+a 2nd time.
+<p>
+Score files are conventionally saved with extension <tt>.sco</tt>. After loading a
+score file the tunes that
+are contained in the file will be listed in the <b>tunes</b> panel.
+<p>
+<dt>add score file...<dd>
+Same as <b>load</b>, but keep already loaded tunes.
+<p>
+<dt>save score file...<dd>
+The tunes in memory can be saved to file by clicking this button.
+<p>
+A score file is more or less human readable.
+Modifications like renaming or copying of the tunes could be done with a
+text editor. Also other modifications like e.g. re-coloring of all notes
+could be done, as each parameter has a unique letter code. Tip: in your text
+editor disenable line wrapping.
+<p>
+<dt>read script...<dd>
+After clicking this button and supplying a file name in the dialog panel a script
+file will be read and shown in the built-in editor. The script is executed, after this
+the result will
+appear in the score at the bottom.
+An alert window will pop up if errors in the script are detected.
+<p>
+<dt>save script...<dd>
+The script can be saved by choosing this menu item.
+<p>
+<dt>current dir...<dd>
+For switching to a different directory. A list of available directories beneath
+the current directory is shown after clicking the black triangle in the dialog panel.
+The current directory always is displayed at <b>current dir</b>
+halfway at the right side.
+  </dl>
+<p>
+<dt>Import/Export<dd>
+  <dl>
+<dt>save as WAVE...<br>
+    save as MIDI...<br>
+    save as postscript...
+<dd>Creating files in different formats: WAVE, MIDI or human-readable scores in
+postscript format.<br>
+See chapter <a href="#wave file">Export WAVE file</a>, <a href="#midi file">Export MIDI file</a>,
+<a href="#postscript file">Export postscript file.</a>
+<p>
+<dt>read MIDI file...
+<dd>Import a MIDI file. See chapter <a href="#import midi">Import MIDI file</a>.
+  </dl>
+<p>
+<dt>Help<dd>
+  <dl>
+<dt>Manual<dd>
+The Amuc manual is in html format. Selecting the menu item will open a browser.
+The default browser is Epiphany, which can be modified by editing the file .amucrc in your
+home directory.
+<p>
+<dt>About<dd>
+Shows my name and the URL of Amuc's website.
+  </dl>
+</dl>
+
+<a name="buttons right">
+<h2>The buttons at the right side</h2></a>
+<dl>
+
+<dt>new tune...<dd>
+After clicking this button, the dialog panel will ask for the name
+for a new tune. This name will be added to the list in the tunes panel. If one
+of the score panels is active, then it will be assigned to the new tune at that same moment.
+<p>
+<dt>copy tune...<dd>
+The tune that has been selected in the tunes panel will be copied.
+The dialog panel will ask for a name
+for the new tune. If this is not an existing name, then the name will 
+be added to the list in the tunes panel.
+<p>
+<dt>rename...<dd>
+To rename the tune that has been selected in the tunes panel.
+<p>
+<dt>up
+<dt>down<dd>
+The tune that has been selected in the tunes panel can be moved up or down within the list.
+<p>
+<dt>remove<dd>
+To remove the tune that has been selected in the tunes panel.
+<p>
+<dt>clear tune<dd>
+This button affects the tune of the active score panel. It will be reset.
+If no score panel is active, then hitting this button will reset
+the complete score at the bottom, which is useful when manual commands are being used to populate it.
+<p>
+<dt>cmd...<dd>
+The commands as listed in a script file also can be given manually, by typing
+them in the dialog panel and clicking <b>ok</b> or by hitting
+the 'enter' key.
+<p>
+Multiple commands can be given by separating them with a semicolon.
+Don't forget the <b>time:</b> parameter after <b>add</b> and <b>set</b> commands.
+Because the score at the bottom might be modified by an entered command, it will
+always be redrawn after a command. Also the actions that are valid
+at time 0 will be executed.
+<p>
+If the command in the
+dialog panel is still valid, then clicking the <b>ok</b> button again will re-execute it.
+<p>
+Operations that are not provided by the available buttons sometimes can be
+performed by giving an appropriate command. After reading the
+script syntax chapter the following examples will be clear.
+<p>
+<dl>
+<dt><i>Take tune <tt>tune1</tt>, shift all notes 4 units to the right:</i>
+<dd><tt>take tune1 time:0.4; put tune1</tt>
+
+<dt><i>Take tune <tt>tune1</tt>, lower it 5 semitones:</i>
+<dd><tt>take tune1 shift:-5; put tune1</tt>
+
+<dt><i>Omit notes between 1.0 and 1.4 from tune <tt>tune1</tt>:</i>
+<dd><tt>take tune1 to:1; take-nc tune1 from:1.4; put tune1</tt>
+
+<dt><i>Join tunes <tt>tune1</tt> and <tt>tune2</tt>:</i>
+<dd><tt>take tune1; take-nc tune2 time:0; put tune1</tt>
+</dl>
+<p>
+Of course, commands like these also could be typed in the script window,
+possibly followed by an <tt>exit</tt> statement, which will interrupt the script execution.
+<p>
+<dt>mod times<dd>
+With this button the current script file can be modified such that
+a gap in the complete score is created, or that a part of it is removed.
+The script in the built-in editor will be modified.
+<p>
+The positions of the starting and stopping marks in the complete score
+control the operation. The <b>time:<i>n</i></b> parameter of <b>set</b>
+and <b>add</b> commands will be modified, as follows:
+<dl>
+<dt>If the starting mark is before the stopping mark:
+<dd>
+All times greater or equal than the starting mark will be increased with
+an amount equal to the distance between the starting and stopping mark.
+<dt>If the starting mark is after the stopping mark:
+<dd>(Don't mind the warning that will be issued)<br>
+In case of <b>set</b> command:
+All times greater or equal than the starting mark will be decreased with
+an amount equal to the distance between the stopping and starting mark.
+All times between the stopping and starting mark will get the value
+of the stopping mark.
+<p>
+In case of <b>add</b> and <b>take</b> commands:
+All times greater or equal than the starting mark will be decreased with
+an amount equal to the distance between the stopping and starting mark.
+All tunes starting between the stopping and starting mark will be removed.
+</dl>
+<p>
+Notice that if only relative timing (e.g. <tt>rt:-1</tt>) has been used,
+then there are no <b>time:</b> parameters, so <b>mod times</b> will have no effect.
+<p>
+<dt>run script<dd>
+This button should be clicked after modifications in the scores or in the script. The 
+complete score at the bottom will be redrawn. The set commands that are valid
+at time 0 will be performed. If you don't want this, then enable checkbox 
+<b>ignore set cmd's</b>.
+<p>
+<dt>play
+<dt>stop
+<dd>
+Will play and stop the complete score. While playing, some controls
+have an instantaneous effect (e.g. the <b>tempo</b> control and several
+instrument settings), other controls have no effect. The <b>stop</b>
+button works also for the 2 score panels.
+<p>
+Starting and stopping times can be controlled by clicking in the upper part of the score,
+using the left or the right mouse button. Small red triangles then will appear.
+<p>
+While playing, sliders and checkboxes will be redrawn such that
+they display their current value. Notice that <b>set</b> commands in scripts
+are only executed when the complete score is played. If a tune in a score panel is
+played, then the control values keep their current values, which can
+be modified manually if needed.
+</dl>
+<p>
+<a name="scope">
+<h2>Oscilloscope</h2></a>
+This panel shows the contents of an internal audio buffer. Slider <b>scale</b>
+controls the time scale of the displayed waveform. At low settings the
+precize waveforms can be inspected, at higher settings the envelope of
+the audio signals will be visible.
+
+<a name="script edit">
+<h2>Script editor</h2></a>
+The script editor is located at the right bottom of the window. Its
+dimensions are increased by increasing the window size:
+<p>
+<center><img src="edit-window.png"></center>
+<p>
+At the left side there is an area containing numbers, which indicate the number
+of the measures where <b>add</b> commands have inserted a tune.
+<p>
+The script editor is a simple text editor, where the left mouse button
+activates the text cursor, and the following keys behave as expected:<br>
+<blockquote>
+arrow up, down,<br>
+arrow left, right, (may shift the current line, if it is too long for the window)<br>
+backspace,<br>
+return,<br>
+ctrl-U (clears the current line).
+</blockquote>
+Text, selected in other windows can be pasted at the location of the cursor,
+using the middle mouse button.
+<b>Set</b> commands can be generated automatically. First select a color in
+the color panel, then press ctrl-S. A complete <b>set</b> command will
+be written to the line where the text cursor is located (if this line is empty) or
+to the next line (if it's not empty). This also works if the <b>sampled notes</b>
+checkbox is enabled. The short form of the <b>set</b> options is used (e.g. "stw"
+instead of "start-wave").
+<p>
+The script is executed with the <b>run script</b> button,
+and saved with the <b>save script</b> button. If the capabilities of the built-in
+editor are too limited, you better use a normal editor instead, and click the
+<b>read script...</b> button afterwards.
+
+<a name="complete score">
+<h2>The complete score</h2></a>
+The score at the bottom is assembled from the available tunes. As mentioned
+before, this is controlled by the script. The syntax is explained
+in chapter <a href="#scripts">Scripts</a>.
+<p>
+At the bottom of the score the names of the tunes that were used as building blocks are shown.
+Clicking on the <b>play</b> button (right middle) will start the playing,
+during which the appearance of all controls is updated such that they show their 
+current value.
+<p>
+This score cannot be modified with the mouse, only starting and stopping times of the
+playback can be entered. This is done by clicking the left and right mouse buttons
+respectivily in the upper area of the score, and is indicated by small red triangles.
+They can be undone by clicking at the same point a 2nd time, or by clicking the middle
+mouse button.
+<p>
+Notice that always before playing all script <b>set</b>
+commands are executed, also when the playing starts not at zero.
+However, when the <b>ignore set cmd's</b> checkbox is enabled, then the set commands will
+not be executed. This is handy if you want to experiment with different instrument
+settings.
+<p>
+The <b>note info</b> button works also for this score.
+
+<a name="zoom">
+<h2>Zoomed-out score view</h2></a>
+If the checkbox labeled <b>zoom</b> is enabled, then the notes in the score panel
+will be enlarged 3 times in the horizontal
+direction. The timing of the individual notes can be modified such that at the beginning
+of a note an extra delay is introduced, as well as at the end of a note.
+In the following screenshots you can see:
+<li>8 notes in 4 time units
+<li>8 notes in 6 time units
+<li>3 notes in 4 time units
+<li>3 notes in 8 time units
+<li>a fast tremolo
+<p>
+No zoom, normal display:<p>
+<img src="no-zoom.png">
+<p>
+The same notes, zoomed, display mode = timing:<p>
+<img src="zoomed.png">
+<p>
+Editing the start end the end of notes in the zoomed window is simple. First set the
+display mode to <b>timing</b>. Then, clicking on the start of a
+note with the left mouse button will introduce a delay of 1, 2, 0, ... times
+1/3 note unit. Clicking with the right button has the same effect at the end
+of the note. Clicking somewhere in the middle of a long note has a visible
+but not an audible effect.
+
+<a name="keys">
+<h2>Scales and score keys</h2></a>
+If the <b>score keys</b> button is clicked then a window pops up:
+<p>
+<center><img src="keys-window.png"></center>
+<p>
+The keys are listed in the leftside panel. The columns
+denote respectively: the major keys, the minor keys, the number of flats or sharps,
+and the sequence number of the notes relative to base tone (the tonic).
+This last column is updated if a new base tone is choosen.
+<p>
+The circle-of-fifths figure at the bottom indicates with a red dot the choosen key.
+<p>
+If the <b>set key</b> button
+is clicked, then key signatures will be drawn in the active score panel
+(the score panel with button <b>active</b> enabled). So if e.g.
+the base tone F is selected, then a flat signature will appear in front of all score lines
+for note B. When clicking the <b>force key</b> button, all notes in the active score panel
+will get the key signature of their score line.
+<p>
+At the right side a list is shown of a collection of scales and chords. If an item is clicked, then
+in the active score (provided it is set to the piano-key mode),
+the lines belonging to the particular scale or chord are drawn in grey, the tonic
+in blue. The lines not belonging to the scale or chord are empty.
+<p>
+The list items appear in 3 different colors:
+<ul>
+<li>Red: the line positions are dependent on the score key.
+So e.g. if the score key is Db, then the 'major' scale will start at the note Db.
+The name 'Db major' then will be drawn at the bottom of the score.
+Checkbox <b>local dep</b> is off by default.
+
+<li>Blue: the line positions are dependent on the choosen item in the <b>keys</b> list.
+So e.g. if the choosen key is Db, then the C7 chord will be interpreted as Db7.
+This name will be drawn at the bottom of the score.
+Checkbox <b>local dep</b> is on by default.
+
+<li>Black: the line positions are constant.
+</ul>
+The operation of a red or blue item can also be controlled manually with the <b>local dep</b> checkbox.
+<p>
+If the same score is assigned to both score panels, then the first could display a scale and
+the other a chord. Then you can verify wether the combination conforms to the rules of
+jazz or classic harmony.
+<p>
+The scales and chords are specified in a file <tt>chords-and-scales</tt>, which should be
+present in the current directory or in <tt>/usr/share/amuc</tt>. This file looks like:
+<p>
+<table class="listing">
+<tr><td><pre>
+"white keys"            0,2,4,5,7,9,11  no
+"major"                 0,2,4,5,7,9,11  scale
+"minor"                 0,2,3,5,7,9,10  scale
+"blues scale"           0,3,5,6,7,10    scale
+"major pentatonic"      0,2,4,7,9       scale
+"minor pentatonic"      0,3,5,7,10      scale
+"diminished"            0,1,3,4,6,7,9,10 scale
+"whole tone"            0,2,4,6,8,10    scale
+"C7 (dominant 7th)"     0,4,7,10        chord
+"C- (minor 7th)"        0,3,7,10        chord
+"C/0 (half-diminished)" 0,3,6,10        chord
+"Co (diminished)"       0,3,6,9         chord
+"C7sus4 (suspended 4th)" 0,5,7,10       chord
+</pre></tr>
+</table>
+<p>
+The 2nd column indicates for each note the number of semitones from the root. The
+last column can contain <tt>scale</tt> (dependent on score key, displayed in red),
+<tt>chord</tt> (dependent on selected key in keys window, displayed in blue),
+or <tt>no</tt> (constant, displayed in black).
+<p>
+Some chords span more then 1 octave, e.g. the C11 chord. These will be displayed
+slightly different: one base line in blue, the lines of the 1st octave in black
+and the lines in the 2nd octave in green. If the chord name is clicked a second
+time, then the displayed lines will shift over 1 octave.
+<p>
+Good chord and scale combinations can be found in books.
+<a href="chords-and-scales.html">Here</a> is useful table for jazz and pop music.
+The following screenshot shows the result of an attempt to find good chords with a melody.
+The melody (upper score panel) is in Bb minor. According to the table this could
+be combined with Bbmaj7 chords. This was done in the lower panel, and indeed:
+together they sound good. (Of course, harmonizing a melody involves much more
+then conforming to a table!)
+<center><img src="piano-mode.png"></center>
+<p>
+
+<a name="wave file">
+<h2>Export WAVE file</h2></a>
+After selecting menu item <b>Import/Export -> save as WAVE...</b>, the dialog panel will ask for
+a file name. After this, a stereo WAVE file will be generated.
+The file is located in the current directory.
+<p>
+<a name="midi file">
+<h2>Export MIDI file</h2></a>
+After selecting menu item <b>Import/Export -> save as midi...</b>,
+the dialog panel will ask for a file name. Then a MIDI file will be generated in the current directory.
+<p>
+The default mapping for real-time instruments is as follows:<br>
+<blockquote>
+<table class="nob">
+<tr><td>black<td>: MIDI instrument 6, electric piano 2</tr>
+<tr><td>red<td>: MIDI instrument 25, guitar</tr>
+<tr><td>green<td>: MIDI instrument 22, accordion</tr>
+<tr><td>blue<td>: MIDI instrument 1, piano</tr>
+<tr><td>purple<td>: MIDI instrument 17, drawbar organ</tr>
+<tr><td>brown<td>: MIDI instrument 8, clavinet</tr>
+</table>
+</blockquote>
+The default mapping for sampled instruments is:<br>
+<blockquote>
+<table class="nob">
+<tr><td>black<td>: MIDI percussion instrument 36, bass drum</tr>
+<tr><td>red<td>: MIDI percussion instrument 47, low-mid tom</tr>
+<tr><td>green<td>: MIDI percussion instrument 38, acoustic snare </tr>
+<tr><td>blue<td>: MIDI percussion instrument 46, open hi-hat</tr>
+<tr><td>brown<td>: MIDI percussion instrument 42, closed hi-hat</tr>
+<tr><td>purple<td>: MIDI percussion instrument 62, mute high conga</tr>
+</table>
+</blockquote>
+The mapping can be overruled by script commands, using e.g. <tt>out-par midi-instr-0:</tt>.
+These commands can be timed, so the instrument mapping can change at any choosen moment.
+See chapter <a href="#scripts">Scripts</a>.
+<p>
+The created MIDI file is a General MIDI (GM) file, format 1 (which means: one track
+for each channel). The channels are named or renamed according to their MIDI instrument.
+<a name="postscript file">
+<h2>Export Postscript file</h2></a>
+Human-readable scores can be generated by selecting menu item <b>Import/Export -> save as postscript...</b>.
+In the following picture the rendering of a postscript file by Evince is shown.
+The depicted page is from a piece written for big band.
+<p>
+<center><img src="ps-notes.png"></center>
+<p>
+The generated scores are not perfect. Specifically, triplets are not rendered
+as they should: marked with <tt>-3-</tt>. The reason is that in Amuc no syntax is
+available to indicate which notes belong to a triplet.
+<p>
+Percussion instruments get their own stave, they are rendered as 1/8 notes.
+<p>
+The translation to postscript goes via a format called ABC. More information is available
+at the ABC homepage: <a href="http://www.walshaw.plus.com/abc/">
+http://www.walshaw.plus.com/abc/</a>
+<p>
+The code in ABC format, not translated to postscript, also can be written to a file.
+This happens if you specify a file name ending with <tt>.abc</tt>.
+If needed you can modify this file (e.g. by modifying the clef or
+the unit note length, or by adding triplets),
+and then translate it to postscript by program Abcm2ps,
+available in directory <tt>src-abcm2ps</tt>.
+For further details see chapter
+<a href="#abcm2ps">Abcm2ps</a><br>
+<p>
+<a name="import midi">
+<h2>Read MIDI file</h2></a>
+An awful lot of free MIDI files are available on the internet. You can import
+them in Amuc, learn from them and modify them.
+<p>
+If, after selecting menu item <b>Import/Export -> read MIDI file...</b> and hitting <b>ok</b>
+a MIDI file is read 
+for the first time, then a file with the same base name and extension <tt>.gm-map</tt>
+will be created. This file will control the mapping from MIDI instruments to Amuc instruments.
+<p>
+A mapping file might look as follows:
+<p>
+<table class="listing">
+<tr><td><pre>
+set format:2 key:C acc:flat
+channel=1  time=0  "Soprano Sax" (6)              black midi 0
+channel=1  time=72 "Electric Piano 2" (6)         black midi 0
+channel=2  time=12 "Acoustic Grand Piano" (1)     black midi 0
+channel=3  time=24 "Reed Organ" (21)              black midi 0
+channel=4  time=36 "Drawbar Organ" (17)           black midi 0
+channel=10 time=0  PERCUSSION                           midi 0
+</pre></tr>
+</table>
+<p>
+The first line is for setting some parameters.<br>
+<tt>format:2</tt> the current format of this file.<br>
+<tt>key:C</tt> sets the key signature for the scores, the <tt>C</tt>
+can be replaced by another key.<br>
+<tt>acc:flat</tt> controls how MIDI notes are interpreted,
+e.g. a MIDI note number 61 could be a C# or a Db. This <tt>acc</tt> is short for 'accidental'.
+It can have value <tt>sharp</tt> or <tt>flat</tt>.
+<p>
+There are 2 optional parameters:<br>
+<tt>shift:<i>n</i></tt> to shift all notes <i>n</i> semi-tones.<br>
+<tt>tinc:<i>n</i></tt> (short for 'time increase') to increment note length's with a factor <i>n</i>.
+This may be a real number. The default is 1.
+<p> 
+After the first line, the columns have the following meaning:
+<ol>
+<li>MIDI channel</li>
+<li>The time that this channel was assigned to a MIDI instrument (by a 'program change' message)</li>
+<li>The assigned MIDI instrument</li>
+<li>The General MIDI number of this instrument</li>
+<li>The Amuc instrument to which this MIDI instrument will be mapped</li>
+<li>The name of the tune to which the MIDI channel will be written</li>
+<li>The group number of this tune</li>
+</ol>
+You are supposed to edit the last 3 colums before hitting the <b>ok</b> button for the 2nd time.
+If different group numbers (0, 1 or 2) are assigned to the same tune,
+then a warning will be issued. If the frequency of a channel should be shifted e.g. 6 semi-tones, then add
+an extra +6 or -6 at the end. The mapping file now might look as follows:
+<p>
+<table class="listing">
+<tr><td><pre>
+set format:2 key:F acc:flat
+channel=1  time=0  "Soprano Sax" (6)              black  saxes 0
+channel=1  time=72 "Electric Piano 2" (6)         blue   piano 0
+channel=2  time=12 "Acoustic Grand Piano" (1)     black  piano 0
+channel=3  time=24 "Acoustic Bass" (33)           red    bass  0 +12
+channel=4  time=36 "Drawbar Organ" (17)           purple organ 0
+channel=10 time=0  PERCUSSION                            drums 0
+</pre></tr>
+</table>
+<p>
+The mapping of MIDI percussion instruments
+is fixed. You might alter it by modifying file <tt>midi-in.cpp</tt> in the source code
+and recompile.
+<p>
+In standard GM files the percussion instruments are assigned to channel 10.
+An extra line in the mapping file will appear with instrument name <tt>PERCUSSION</tt>,
+even if no explicit assignment to this channel is present in the MIDI file.
+
+<a name="monosynth">
+<h1>Mono Synthesizer</h1></a>
+Instruments can double as a traditional mono synthesizer. If choice
+<b>msynth</b> in an instrument control panel is clicked, then the following window
+will appear.
+<p>
+<center><img src="mono-synth.png"></center>
+<p>
+The mono synthesizer has been carefully crafted to provide good and versatile sounds
+whose control is not too complicated. Conceptually the different parts work together
+as follows: the output of 2 oscillators, VCO1 and VCO2, and a pink noise source
+are added in MIXER. The resulting signal is controlled by an
+envelope generator, EG1, and by a bandpass/lowpass/highpass filter, VCF. A low-frequency
+oscillator, LFO, and a 2nd envelope generator, EG2 can modulate the amplitude, the pitch
+and the filter cutoff. A third oscillator, VCO3, can modulate the amplitude and the filter cutoff.
+<p>
+A short listing of the different parts:
+<dl>
+<dt>VCO1<dd>
+Voltage controlled oscillator, with 3 wave forms. Can be detuned to get
+richer sounds.
+The slider <b>waveform</b> controls the shape of the pulse or the triangle wave.
+With the <b>FM VCO2</b> slider the VCO2 wave can be FM modulated. Especially if the
+VCO2 <b>pitch mult</b>(iplier) is 2 or more this yields interesting sounds.
+<p>
+A special effect is created if the <b>trigger VCO2</b> checkbox is enabled. Then
+VCO1 will trigger VCO2 at each cycle, so if you listen to VCO2, it will seem to
+have the frequency of VCO1. At each cycle of VCO1 one or more cycles of VCO2 will
+be heared, dependent on the <b>pitch mult</b>. slider of VCO2, which will create
+a formant peak in the sound spectrum.
+<p>
+<dt>VCO2<dd>
+The 2nd voltage controlled oscillator, also with 3 wave forms.
+The pitch can be shifted from -1 to +8 octaves.
+<p>
+<dt>VCO3<dd>
+This voltage controlled oscillator is used for modulation.
+The pitch can be shifted from -1 to +8 octaves.
+This VCO can modulate the amplitude and/or the cutoff frequency of the VCF,
+which might yield somewhat rough sounds. If the <b>ampl. mod.</b> slider is in its
+highest position, then ring modulation will occur.
+<p>
+<dt>LFO<dd>
+The low-frequency oscillator can be used to modulate the amplitude and/or
+the VCO2 frequency and/or the cutoff frequency of the VCF. If the <b>ampl. mod.</b> slider is in its
+highest position, then ring modulation will occur.
+<p>
+Two extra kinds of wave are provided: white noise, and a combination of 3 sinusoids called <b>flutter</b>.
+Their frequency range can be choosen with the <b>frequency</b> slider.
+<p>
+<dt>MIXER<dd>
+The 1st and 2nd slider control the amplitude of VCO1 and VCO2. With the 3rd slider a pink noise signal
+can be added.
+<p>
+<dt>EG1<dd>
+The first envelope generator controls the course of the amplitude.
+Four sliders control a classic ADSR envelope.
+The <b>LFO effect</b> slider: if value = 0, then the effect of the LFO waveform is 
+independent from the EG1 waveform.
+If value = 2, then the EG1 waveform will modulate the amplitude of the 
+LFO waveform, in order to create a natural-sounding modulation.
+<p>
+<dt>PORTAMENTO<dd>
+If 2 notes overlap with a minimum of 1 time unit, then portamento will
+occur if this slider value is non-zero.
+<p>
+<dt>EG2<dd>
+Similar to EG1. It does not modify the amplitude however, it modulates the frequency
+(<b>pitch mod.</b>) and/or the VCF cutoff frequency
+(<b>filter mod.</b>).
+At the start of a note the envelope generators are not reset, they keep the momentary value
+from the preceeding note. This yields a more natural sounding result compared to the case
+where each note would start with envelopes starting at zero.
+<p>
+The characteristics of the envelope generators are both displayed. The x-axis of these curves
+are scaled such that the envelope of EG1 fits more or less inside its window. Between the decay- and the
+release phase a constant time-interval is inserted, with a grey-colored background.
+<p>
+<dt>VCF<dd>
+This is the voltage-controlled bandpass/lowpass/highpass filter. There is a choice between 2nd and 4th order.
+The output amplitude can be (soft) clipped, which is useful at high resonance values.
+<p>
+Because the filter is controlled by many sources, you easily can loose track. Because of this, a small display
+has been provided. Two black lines show the frequency of VCO1 and VCO2, a red line shows 
+the cutoff frequency of the VCF.
+<p>
+<dt>AMPLITUDE<dd>
+The master amplitude control.
+<p>
+<dt>load patches<dd>
+A file named <tt>monosynth-patches</tt> will be read. If it is found in the
+current directory, then the patch names will be written in black,
+if it is found in directory <tt>/usr/share/amuc</tt>, then in blue.
+A patch can be effectuated by clicking on its name.
+<dt>save this patch<dd>
+After modifying a patch with the slider controls, it can be saved in memory.
+The <tt>monosynth-patches</tt> file is not altered.
+<dt>add current patch<dd>
+The current patch is added to the list. It will be named <tt>NEW</tt>. Later you can
+modify <tt>monosynth-patches</tt> with a text editor and give it a meaningful name.
+<dt>save patches<dd>
+Write a new file <tt>monosynth-patches</tt> to the current directory.
+</dl>
+If a synthesizer is instantiated for the first time it will be initialized
+with the default patch, which is a fat bass sound. Actually, setting the sound
+of a synthesizer is a delicate process, but it helps if you know what you are
+doing. Sometimes a patch sounds good for low pitches but not for higher notes,
+or vice-versa.
+<p>
+At the left bottom corner there is a button labeled <b>eq?</b>. If it is clicked
+then a line is drawn at the left side with one of the instrument colors. This
+means that this synthesizer will use the patch of that other synthesizer.
+<p>
+Notice the way that the synthesizer control window is displayed. If a different
+instrument is choosen in the color panel and the instrument happens to be
+a synthesizer, this is only visible by the fact that the <b>msynth</b> label
+in the choice box is enabled, the synthesizer control window is not visible however.
+This is done because this window is rather intrusive. You can make it visible by clicking
+the <b>msynth</b> label.
+<p>
+The control string for a mono synthesizer is rather long, e.g.
+<tt>F5,00201,702,300,5040500,050,0aa70,0,088950,92010,8</tt><br>
+so you will create it inside a script
+using the ctrl-S key. Still for small modifications it is handy to set the parameters manually.
+The numbers reflect the positions of sliders, choice- and check boxes. The fields are ordered
+as follows:
+<p>
+<table>
+<tr><td colspan=12 class="grey1"><center>Synthesizer parameters</center>
+</tr><tr><td class="grey">field nr.</td><td>&nbsp;</td><td>1</td><td>2</td><td>3</td><td>4</td>
+   <td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td>
+</tr>
+<tr><td class="grey">name</td><td>format</td><td>VCO1</td><td>VCO2</td><td>VCO3</td><td>LFO</td>
+   <td>MIXER</td><td>EG1</td><td>PORTAMENTO</td><td>EG2</td><td>VCF</td><td>AMPLITUDE</td>
+</tr>
+<tr><td class="grey">example</td><td>F5,</td><td>00201,</td><td>702,</td><td>300,</td><td>5040500,</td>
+   <td>050,</td><td>0aa70,</td><td>0,</td><td>088950,</td><td>92010,</td><td>8</td>
+</tr>
+</table>
+
+<a name="scripts">
+<h1>Scripts</h1></a>
+A script file (conventionally with <tt>.scr</tt> extension) consists of separate
+commands, each ending in a newline or a semicolon. Parameters for the commands
+have the form <i>keyword:number</i>. The comment sign is #, after this character 
+the rest of the line will be ignored.
+The basic commands are as follows.
+<p>
+<table border=1 cellpadding=3 bgcolor="white">
+<tr><td colspan=2 class="grey1"><center>Basic script commands</center>
+</tr>
+<tr>
+<td class="grey">take <i>tune</i>
+<td>Clear the internal score buffer, then copy tune <i>tune</i> to it.
+</tr>
+<tr>
+<td class="grey">take-nc <i>tune</i>
+<td>Copy tune <i>tune</i> to the internal buffer without first clearing it.
+</tr>
+<tr>
+<td class="grey">add
+<td>Add the buffer contents to the complete score.
+</tr>
+<tr>
+<td class="grey">add <i>tune</i>
+<td>Add tune <i>tune</i> directly to the complete score.
+</tr>
+<tr>
+<td class="grey">put <i>tune</i>
+<td>If <i>tune</i> is found in the list of tunes, then copy the contents of the 
+buffer to this tune.
+If <i>tune</i> is not found, then first create it.
+</tr>
+<tr>
+<td class="grey">set
+<td>Set parameters.
+</tr>
+<tr>
+<td class="grey">out-par
+<td>Parameters for output (postscript, MIDI).
+</tr>
+<tr>
+<td class="grey">sample-dir:<i>d1,d2,...</i>
+<td>Specifies the directories where sample wave files are located. The current directory is
+as usual '.', the standard Amuc data directory is <tt>/usr/share/amuc</tt>.
+</tr>
+<tr>
+<td class="grey">extended-syntax
+<td>Enable extra (undocumented) features: amplitude and "eq?" settings can be controlled
+separately for each instrument group.
+</tr>
+<tr>
+<td class="grey">exit
+<td>Skip rest of script.
+</tr>
+</table>
+<p>
+Most basic commands can have parameters. The <tt>add, take</tt> and <tt>take-nc</tt>
+commands take the same parameters, as follows:
+<p>
+<table border=1 cellpadding=3 bgcolor="white">
+<tr><td colspan=2 class="grey1"><center>Parameters for <b><tt>add</tt>, <tt>take</tt>
+and <tt>take-nc</tt></b></center>
+</tr>
+<tr>
+<td class="grey">time:<i>number</i>
+<td>Add at a certain time.<br>
+<i>number</i> has one of 2 forms:<br>
+&nbsp;&nbsp;<i>n</i> - indicates the measure number<br>
+&nbsp;&nbsp;<i>n.m</i> - e.g. 3.2 indicates the 2nd note-unit in measure number 3.<br>
+Multiple times are also supported, e.g. <tt>time:2.4,9</tt> means that
+the tune will be added at the start of measures 2.4 and 9.<br>
+If no time:<i>n</i> command is given, then the current time is supposed, which is defined
+as the latest stopping time of all tunes added until now.
+</tr>
+<tr>
+<td class="grey">rt:<i>number</i>
+<td>Relative time: add with respect to the current time.
+</tr>
+<tr>
+<td class="grey">shift:<i>n</i>
+<td>Shift all notes <i>n</i> semitones up (if <i>n</i> is positive) or down (if <i>n</i> is negative).
+If the score is in a key containing flats, then accidentals (the black keys of a piano)
+will be flats. If the score is in a key containing sharps, then they will be sharps.
+</tr>
+<tr>
+<td class="grey">raise:<i>n</i>
+<td>Shift all notes <i>n</i> lines up or down. The sign of the notes is not
+copied, like when moving selected notes with the mouse.
+</tr>
+<tr>
+<td class="grey">from:<i>n</i> to:<i>m</i>
+<td>Take an interval. <i>n</i> and <i>m</i> are numbers like in the <tt>time:</tt> parameter.
+</tr>
+<tr>
+<td class="grey">color:<i>s</i>
+<td>Recolor all copied notes. <i>s</i> = black, red, green, blue, brown, purple.
+</tr>
+</table>
+<p>
+<a name="out-par">
+The <tt>out-par</tt> command specifies parameters used for postscript and MIDI output.
+<p>
+<table border=1 cellpadding=3 bgcolor="white">
+<tr><td colspan=2 class="grey1">
+<center>Parameters for <b><tt>out-par</tt></b></center>
+<td class="grey1">Valid values
+</tr>
+<tr>
+<td class="grey">time:<i>number</i>
+<td>The <tt>midi-instr</tt> and <tt>midi-perc</tt> parameters will be effective at the specified time,
+see the <tt>set</tt> command.
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">midi-instr-<i>g</i>:<i>n1,n2,n3,n4,n5</i>
+<td>Set mapping from instruments (black, red, blue, green, purple, brown) to midi instruments.
+A value 0 means: no mapping.<br>
+<i>g</i> is the group number of a score, as choosen by the <b>gr#</b> button in a score panel.<br>
+The default mapping is <tt>midi-instr-0:6,25,21,1,5,17</tt>. 
+<td>0 &le; <i>g</i> &le; 2<br>
+1 &le; <i>n1</i> &le; 128, etc. (according to the GM standard)
+</tr>
+<tr>
+<td class="grey">midi-perc-<i>g</i>:<i>n1,n2,n3,n4,n5</i>
+<td>Set mapping from sampled instruments (black, red, blue, green, purple, brown) to midi instruments
+at midi channel 10. A value 0 means: no mapping.<br>
+The default mapping is <tt>midi-perc-0:36,47,38,46,42,62</tt>
+<td>0 &le; <i>g</i> &le; 2<br>
+35 &le; <i>n1</i> &le; 81, etc. (according to the GM standard)
+</tr>
+<tr>
+<td class="grey">key:<i>k</i>
+<td>Set the key for the complete score. Used
+for postcript output. The <tt><i>k</i></tt> parameter should be
+one of the keys as shown in the <b>score keys</b> panel.
+<td><i>k</i> = C, c, ...
+</tr>
+<tr>
+<td class="grey">nupq:<i>n</i>
+<td>Set note-units-per-quarter-note. Used
+for postcript- and for MIDI output. Default value: 4.
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">transp-<i>g</i>:<i>n1,n2,n3,n4,n5,n6</i>
+<td>Some real instruments are sounding lower or higher then expected. E.g. when ad alto saxophone
+plays a C then an Bb is heard. The written score for these instruments should thus be
+transposed, which can be done with this statement. The value of <i>n1</i> etc.
+is equal to the desired shift in semitones. The key will be modified accordingly.<br>
+<i>g</i> is the group number of a score, as choosen by the <b>gr#</b> button in a score panel.
+<td>0 &le; <i>g</i> &le; 2<br>
+-24 &le; <i>n1</i> &le; 24, etc.
+</tr>
+<tr>
+<td class="grey">single-voice
+<td>Useful for scores for the individual instruments of an orchestra. This option has the
+effect that multi-measure rests are replaced by thick lines plus a number, and that a warning
+is issued if an instrument plays not a single tone. Real chords (all 
+chord tones of equal length) will get only a warning at first occurance.<p>
+Use this option only to generate an <tt>.abc</tt>
+file, then use this file with a customized header as input for the Abcm2ps tool.
+<td>&nbsp
+</tr>
+<tr>
+<td class="grey">abc-header:<i>header-file</i>
+<td>The default header statements are replaced by the contents of <i>header-file</i>.
+See chapter <a href="#postscript file">Export postscript file</a> for an example.
+<td>&nbsp
+</tr>
+<tr>
+<td class="grey">annotate</i>:<i>n1,n2,n3,...</i>
+<td>Print annotations 'A', 'B', 'C', ... above measures n1, n2, n3, ... 
+<td>&nbsp
+</tr>
+</table>
+<p>
+The <tt>set</tt> command can take many parameters. Notice that for the start
+of tones two different words are used: "attack" specifies the <i>amplitude</i>
+at the beginning of a tone, "startup" specifies the <i>waveform</i> at the beginning of a tone.
+In the chapter about script editing was described how to generate <tt>set</tt> commands
+automatically.
+
+<p>
+<table border=1 cellpadding=3 bgcolor="white">
+<tr><td colspan=2 class="grey1">
+<center>Parameters for <b><tt>set</tt></b></center>
+<td class="grey1">Valid values<br>for <i>n, m</i> etc.
+<td class="grey1">short form
+</tr>
+<tr>
+<td class="grey">time:<i>value</i>
+<td>Succeeding parameters are valid after this time.<br>
+<i>value</i> has one of 2 forms:<br>
+&nbsp;&nbsp;<i>n</i> - indicates the measure number<br>
+&nbsp;&nbsp;<i>n.m</i> - e.g. 3.2 indicates the 2nd note-unit in measure number 3.<br>
+This parameter can be given more then once on the same line, the last read value is valid.<br>
+Multiple times (with comma-separated numbers) are supported.<br>
+If no <tt>time:<i>n</i></tt> parameter is given, then the current time (as used for the <tt>add</tt>
+command) is supposed.
+<td nowrap><i>value</i> >= 0
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">rt:<i>number</i>
+<td>Relative time: set with respect to the current time.
+<td>&nbsp;
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">tempo:<i>n</i>
+<td>Set the tempo.
+<td><i>n</i> &gt; 10
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">
+  <table class="nob">
+  <tr><td>black <td>ampl:<i>n</i></tr>
+  <tr><td>red   <td>-</tr>
+  <tr><td>green <td>-</tr>
+  <tr><td>blue  <td>-</tr>
+  <tr><td>purple<td>-</tr>
+  <tr><td>brown <td>-</tr>
+  </table>
+<td>Set instrument amplitude in 'nat' mode.
+<td>0 &le; <i>n</i> &le; 9
+<td class="grey">a:
+</tr>
+<tr>
+<td class="grey">black wave-ampl:<i>n</i><br>
+etc.
+<td>Set amplitude of sampled instrument, in both 'phys model' and 'wave file' mode.
+<td>0 &le; <i>n</i> &le; 7
+<td class="grey">wa:
+</tr>
+<tr>
+<td class="grey">
+  <table class="nob">
+  <tr><td>black <td>attack:<i>n</i></tr>
+  <tr><td>green <td>-</tr>
+  <tr><td>blue  <td>-</tr>
+  <tr><td>brown <td>-</tr>
+  </table>
+<td>Set instrument attack.
+<td>0 &le; <i>n</i> &le; 5
+<td class="grey">at:
+</tr>
+<tr>
+<td class="grey">
+  <table class="nob">
+  <tr><td>black <td>decay:<i>n</i></tr>
+  <tr><td>red   <td>-</tr>
+  <tr><td>green <td>-</tr>
+  <tr><td>blue  <td>-</tr>
+  <tr><td>purple<td>-</tr>
+  <tr><td>brown <td>-</tr>
+  </table>
+<td>Set instrument decay.
+<td>0 &le; <i>n</i> &le; 5
+<td class="grey">dc:
+</tr>
+<tr>
+<td class="grey">
+red start-wave:<i>n,m</i><br>
+red sustain-wave:<i>n,m</i>
+<td>Set waveform during startup or sustain.
+The waveform will consist of <i>m</i>
+sinuses, which vary in frequency dependent on the value of <i>n</i>
+(value 1: small difference, tone with a strong formant; 5: big difference,
+bright sounding tone).
+<td>1 &le; <i>n</i> &le; 5<br>2 &le; <i>m</i> &le; 4
+<td class="grey">stw:
+</tr>
+<tr>
+<td class="grey">red tone:<i>n</i>
+<td>Set tone (0: clean, 1: 2nd harmonic added).
+<td>0 &le; <i>n</i> &le; 1
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">red startup:<i>n</i>
+<td>Set duration of startup wave.
+<td>0 &le; <i>n</i> &le; 5
+<td class="grey">su:
+</tr>
+<tr>
+<td class="grey">red start-amp:<i>n</i>
+<td>Set amplitude at startup.<br>
+<i>n</i>=0 : soft startup<br>
+<i>n</i>=3 : loud startup
+<td>0 &le; <i>n</i> &le; 3
+<td class="grey">sa:
+</tr>
+<tr>
+<td class="grey">green wave1:<i>n,m</i><br>
+green wave2:<i>n,m</i>
+<td>Set waveforms.
+The waveform will consist of <i>m</i>
+sinuses, which vary in frequency dependent on the value of <i>n</i>
+(value 1: small difference, tone with a strong formant; 5: big difference,
+bright sounding tone).
+<td>1 &le; <i>n</i> &le; 4<br>2 &le; <i>m</i> &le; 4
+<td class="grey">w1:<br>w2:
+</tr>
+<tr>
+<td class="grey">green freq-ratio:<i>n</i>
+<td>Set frequency ratio wave2/wave1, between 1 and 3.
+<td>0 &le; <i>n</i> &le; 3
+<td class="grey">fr:
+</tr>
+<tr>
+<td class="grey">green chorus:<i>n</i>
+<td>Set chorus effect.
+<td>0 &le; <i>n</i> &le; 3
+<td class="grey">ch:
+</tr>
+<tr>
+<td class="grey">blue rich:<i>b</i>
+<td>Set extra harmonics.
+<td><i>b</i> = on, off
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">blue chorus:<i>b</i>
+<td>Set chorus effect.
+<td><i>b</i> = on, off
+<td class="grey">ch:
+</tr>
+<tr>
+<td class="grey">blue lowpass:<i>n</i><br>
+<td>Lowpass filter/formant shaper.<br>
+n = 0: no filtering, n = 4: strong formants.<br>
+<td>0 &le; <i>n</i> &le; 4
+<td class="grey">lp:
+</tr>
+<tr>
+<td class="grey">blue dur-limit:<i>n</i><br>
+red dur-limit:<i>n</i>
+<td>Limit note duration.<br>
+n = 0: no limit.<br>
+n = 1,2,3,4: limit = 1,2,4,8 note units
+<td>0 &le; <i>n</i> &le; 4
+<td class="grey">dl:
+</tr>
+<tr>
+<td class="grey">
+black fm:<i>n,m</i><br>
+brown fm:<i>n,m</i>
+<td>Set FM parameters. The actual values for the
+modulation index and for the ratio modulation/carrier frequency,
+are as displayed with the <b>fm freq/index</b> slider.
+<td>-1 &le; <i>n</i> &le; 7<br>0 &le; <i>m</i> &le; 7
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">
+black modmod:<i>n,m</i><br>
+brown modmod:<i>n,m</i>
+<td>Modulate the amount of fm modulation with a low frequency signal. The <i>n</i> parameter
+controls the value, the <i>m</i> parameter the frequency of this signal.
+<td>0 &le; <i>n</i> &le; 5<br>0 &le; <i>m</i> &le; 3
+<td class="grey">mm:
+</tr>
+<tr>
+<td class="grey">
+black detune:<i>n</i><br>
+brown detune:<i>n</i>
+<td>Set detuning of modulating frequency.
+<td>0 &le; <i>n</i> &le; 5
+<td class="grey">dt:
+</tr>
+<tr>
+<td class="grey">purple start-harm:<br>&nbsp;&nbsp;<i>n1,n2,n3,n4,n5</i>
+<td>Set startup harmonics.
+<td>0 &le; <i>n1</i> &le; 3, etc.
+<td class="grey">sth:
+</tr>
+<tr>
+<td class="grey">purple sustain-harm:<br>&nbsp;&nbsp;<i>n1,n2,n3,n4,n5</i>
+<td>Set sustain harmonics.
+<td>0 &le; <i>n1</i> &le; 3, etc.
+<td class="grey">suh:
+</tr>
+<tr>
+<td class="grey">purple startup:<i>n</i>
+<td>Set startup duration.
+<td>0 &le; <i>n</i> &le; 5
+<td class="grey">su:
+</tr>
+<tr>
+<td class="grey">purple sound:<i>n</i>
+<td>Set the sound for this instrument:<br>
+0: normal, 1:chorus, 2:distorsion, 3: fluctuating distorsion.
+<td>0 &le; <i>n</i> &le; 3
+<td class="grey">snd:
+</tr>
+<tr>
+<td class="grey">
+  <table class="nob">
+  <tr><td>black <td>synth:<i>F5,...</i></tr>
+  <tr><td>red   <td>-</tr>
+  <tr><td>blue  <td>-</tr>
+  <tr><td>green <td>-</tr>
+  <tr><td>purple<td>-</tr>
+  <tr><td>brown <td>-</tr>
+  </table>
+<td>Turns the instrument into a mono synthesizer. After the <i>F5,</i> header about 40
+single-digit numbers must be given. Though it's not impossible to enter these numbers manually,
+you normally will use the ctrl-S key in the script editor. See chapter 
+<a href="#monosynth">Mono Synthesizer</a> for details.
+<td>&nbsp;</i>
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">black pan:<i>s</i></b><br>etc.
+<td>Set stereo panning of instrument in native mode.
+(Note: <tt>loc:</tt> is similar but obsolete).<br>
+If <i>s</i> = L or R, then pan = medium, and one channel is attenuated and delayed 2 ms.
+<td nowrap><i>s</i> = LL, L, M, R, RR
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">black sampled-pan:<i>s</i></b><br>etc.
+<td>Set stereo panning of instrument in sampled mode.
+(Note: <tt>sampled-loc:</tt> is similar but obsolete)
+<td nowrap><i>s</i> = LL, L, M, R, RR
+<td class="grey">span:
+</tr>
+<tr>
+<td class="grey">black reverb:<i>n1,n2</i><br>
+etc.
+<td>Set reverb (n1 = 0: no reverb, 4: max reverb) and phasing (n2 = 0: no phasing, n2 = 2: fast phasing).
+Also works if in mono synthesizer mode. Only 1 instrument can have reverb.
+<td>0 &le; <i>n1</i> &le; 4<br>
+0 &le; <i>n2</i> &le; 2
+<td class="grey">rev:
+</tr>
+<tr>
+<td class="grey">black mode:<i>s</i></b><br>etc.
+<td>mode:msynth - instrument will be a mono synthesizer<br>
+    mode:nat - native instrument
+<td>s = msynth, native (or: m, n)
+<td class="grey">m:
+</tr>
+<tr>
+<tr>
+<td class="grey">black eq:<i>s</i></b><br>etc.
+<td>If in 'nat' mode, play the sound of a different instrument.
+<br>
+NB! The <tt>pan:</tt> and the <tt>ampl:</tt> parameters are not affected.<br>
+(This isn't provided for sampled instruments.)
+<td><i>s</i> = black, red, green, blue, brown, purple
+<td>&nbsp;
+</tr>
+<tr>
+<td class="grey">black ms-eq:<i>s</i></b><br>etc.
+<td>If in 'msynth' mode, use the patch of a different instrument.
+<td><i>s</i> = black, red, green, blue, brown, purple
+<td>&nbsp;
+</tr>
+<td class="grey">black phys-mod:<i>n1,n2,n3,n4</i></b><br>etc.
+<td>Set sampled instrument sound in 'phys model' mode. The values are: speed, tension, decay, distorsion on/off
+<td>
+1 &le; <i>n1</i> &le; 5<br>
+1 &le; <i>n2</i> &le; 5<br>
+1 &le; <i>n3</i> &le; 5<br>
+0 &le; <i>n4</i> &le; 1<br>
+<td class="grey">phm:
+</tr>
+<tr>
+<td class="grey">black wavefile:<i>n</i></b><br>etc.
+<td>Set sampled instrument in 'wave file' mode. Wave files should start with a number. The <i>n</i>
+parameter specifies this number.<br>
+Notice that after this command, both time stretch and pitch shift will be reset to 0.
+<td>&nbsp;
+<td class="grey">wf:
+<tr>
+<td class="grey">black time-stretch:<i>n</i><br>
+etc.
+<td>Set time stretching of sampled instrument (-3: 50%, 3: 200%).
+<td>-3 &le; <i>n</i> &le; 3
+<td class="grey"><>ts:
+</tr>
+<tr>
+<td class="grey">black pitch-shift:<i>n</i><br>
+etc.
+<td>Set pitch shift of sampled instrument, in semitones.
+<td>-12 &le; <i>n</i> &le; 12
+<td class="grey">ps:
+</tr>
+<tr>
+<td class="grey">black ctr-pitch:<i>n</i><br>
+etc.
+<td>Set pitch control of sampled instrument, in both 'phys model' and 'wave file' mode.
+<td><i>n</i> = on, off
+<td class="grey">cpit:
+</tr>
+</table>
+<p>
+The colors in statements after a <tt>set</tt> need to be mentioned only once per line,
+they stay valid for the rest of the line.
+<p>
+Notice the different semantics of the <tt>time:<i>n</i></tt> parameter. If it follows an 
+<tt>add</tt>, <tt>take</tt> or <tt>take-nc</tt> command, it is valid for the whole line;
+if it follows a <tt>set</tt> command, it is valid for the statements after it.
+<p>
+The options in the above table are in "long" format. Also a "short" format is
+available, e.g. <tt>stw:</tt> instead of <tt>start-wave:</tt>. The short format
+is used when the <tt>set</tt> command has been generated automatically (by pressing
+ctrl-S in the script edit window).
+<p>
+The <tt>pan:</tt> and <tt>span:</tt> parameters have no GUI equivalent.
+<p>
+The <tt>eq:</tt>
+parameter is useful to quickly investigate the impact of using a different instrument,
+or for turning 2 or more mono synthesizers into a polyphonic synth.
+It is also useful for postscript output for an instrument that is played with 2 hands,
+like a piano. The left and right-hand parts then can be given different colors, and
+still sound the same.
+<p>
+The characteristics of the "physical modeling" instruments and the synthesizers
+are set all in one command. This may not be
+very convenient, the reason is that their complete waveform is calculated in one go.
+<p>
+If <i>tune</i> in the list of basic commands is equal to the name of the complete score, then that
+score is taken as input. The name of the complete score is equal to the score file name, minus its
+extension. This way you can easily split the complete score in several big parts, that can be
+processed once more. As an example, the following could be added to <tt>dance.scr</tt>:
+<p>
+<table class="listing">
+<tr><td><pre>
+take dance to:30;         put part1
+take dance from:30 to:45; put part2
+take dance from:45;       put part3
+</pre></td>
+</tr>
+</table>
+<p>
+After saving to another file and removing the original tunes from this file, you have a
+restructured and simplified representation of the original <tt>dance.sco</tt>.
+
+<a name="connect">
+<h1>MIDI controllers</h1></a>
+<h2>Connecting a MIDI keyboard</h2>
+If a compatible (USB) MIDI keyboard is available, then
+this can be used to generate a tune. See the README file for details about connecting
+such a keyboard.
+<p>
+Enabling the <b>connect MIDI keyboard</b>
+checkbox will create the actual connection. If the
+checkbox turns to the disenabled state immediately, then something has gone wrong and
+an alert message will appear. If a connection via Jack has been choosen, then don't
+forget to establish the actual connection, e.g. in the control panel of qjackctl.
+The MIDI keyboard input for Amuc will show up under the ALSA tab.
+<p>
+The only MIDI codes that are used by the program are note-on and note-off. What you hear
+while playing is the instrument choosen in the color panel.
+The timbre and the amplitude can be controlled, not the attack and decay.
+<p>
+You will only hear it if some tune is playing. The reason
+for this restriction is that it is hardly useful to enter played notes if you don't listen
+to an existing tune or rhythm track at the same moment.
+In order to create a tune it is best to first create a small,
+rhythmic tune, then click the <b>play</b> button with <b>repeat</b> enabled. Then play what you
+want on the MIDI keyboard,
+and if you're done, click <b>stop</b>. At that moment a new tune
+called 'keyboard' will be added to the list in the <b>tunes</b> panel.
+This new tune can be renamed, assigned to a score panel, edited, re-colored, etcetera.
+
+<a name="comp tools">
+<h1>Companion tools</h1></a>
+
+<a name="wav2score">
+<h2>Wav2score - from wave file to score</h2></a>
+Pianists who can improvise and want to enter their music into Amuc are lucky: keyboard
+instruments usually have a MIDI output. But sax, horn or flute players, what can they do?
+It is rather difficult but not impossible to translate recorded waveforms to notes, and
+that is what Wav2score is made for. It translates an audio file (WAVE format, 44100Hz
+sampling rate, mono or stereo) from one single-voice instrument into a score file to be imported by Amuc.
+There it can be post-processed, mapped to different sounds, shifted in frequency or tempo, etcetera.
+<p>
+The translation works as follows. A fast-fourier transform (FFT) is applied to the data
+from the wave file, in order to get its time-variant frequency spectrum. A FFT needs
+discrete chunks of data, called FFT data-windows. Short windows yield precision in the time
+domain but cannot handle low frequencies, so there is always a compromise. Wav2score uses
+overlapping data-windows, each multiplied with a Hamming window. In case of stereo
+input, both channels are FFT'ed separately in order to allow phase differences between
+the channels.
+<p>
+The program can be used with or without a graphical user interface. With a GUI it looks
+as follows.
+<p>
+<img src="wav2score.png">
+<img src="score-display.png">
+<p>
+Without a GUI the input file is handled piece by piece, but with a GUI it is read in its
+full length and stored in memory. It is shown in the <b>INPUT WAVE</b> panel. Clicking in
+this panel controls the red line, which marks the beginning of one FFT window, drawn
+separately in the bottom panel. Also the fine - and course sliders get the right value. The
+red line and the state of the sliders are always in agreement.
+<p>
+The frequency spectrum of the FFT window is shown in the top panel. The algorithm implemented
+in Wav2score searches for at most 3 equidistant frequency peaks. If these have been found
+then colored triangles are drawn above the peaks, and a note is created. The MIDI number
+of the note is shown in the <b>INFO</b> panel (where middle C = 261.6Hz = midi number 60).
+The current midi number is shown between square brackets.
+<p>
+You can listen to the wave file, using the <b>PLAY</b> button. The starting point is
+at the red line. This button becomes a stop button while playing.
+<p>
+The Wav2score GUI is only meant for investigation, the options are set at the command line.
+However, the frequency as found by the program for each FFT sample can be overruled
+manually. With the middle mouse button the lowest appropriate spectrum peak in the FFT window
+can be clicked. Then the program calculates an exact peak location using the 2 neigbouring peaks, and, if
+succesful, a black triangle will appear above the peak. Also small black triangles will be drawn
+above every location where harmonics of the fundamental frequency are expected. The list of calculated MIDI numbers in
+the info panel will be updated.
+<p>
+Clicking the left or right mouse button inside the FFT window you can access the previous
+or the next FFT sample.
+<p>
+If button <b>score display</b> is clicked, then a small window will show a visual representation of
+the generated notes. The current fft sample is in the grey area. Unresolved notes are depicted as a
+red-colored line.
+<p>
+The program is started from the terminal, as follows:
+<pre>
+    wav2score [options] &lt;wave-file&gt;
+</pre>
+The output score file, to be imported by Amuc, is <tt>fft.sco</tt>. The options:
+<p>
+<table class="opt-list">
+<tr>
+  <td><tt>-h</tt>
+  <td>Print usage info and exit.
+</tr>
+<tr><td><tt>-nogui</tt>
+  <td>Use command-line interface. (The old <tt>-gui</tt> option is deprecated.)
+</tr>
+<tr><td nowrap><tt>-win <i>nr</i></tt>
+  <td>FFT window = <i>nr</i> samples. Values between 512 and 8192, default: 2048.<br>
+  If the given value is not a power of 2, then internally
+  it is rounded to the next-higher power of 2.<br>
+  Small values yield better time accuracy, bigger values yield enhanced low-frequency resolution.
+  Samples are token at 44100Hz.
+</tr>
+<tr><td nowrap><tt>-min <i>nr</i></tt>
+  <td>Midi number of lowest fundamental (default: 0).
+</tr>
+<tr><td nowrap><tt>-max <i>nr</i></tt>
+  <td>Midi number of highest harmonic (default: dependent on -win parameter).
+</tr>
+<tr>
+  <td nowrap><tt>-ch R|L</tt>
+  <td>If stereo, then select right or left channel.
+</tr>
+<tr>
+  <td nowrap><tt>-c <i>nr</i></tt>
+  <td>MIDI number for middle-C, default: 48. E.g. <tt>-c 36</tt> yields notes
+  1 octave lower. Notice that also floating values are permitted, e.g. <tt>-c 48.5</tt> raises the notes
+  0.5 semi-tone upwards. (The default value equals 48 because in Amuc middle-C is 130.8Hz).
+</tr>
+<tr>
+  <td nowrap><tt>-th <i>nr</i></tt>
+  <td>Threshold for spectrum peaks, default: 0.2<br>
+  Use e.g. 0.9 if only the highest spectrum peak should be evaluated.
+</tr>
+<tr>
+  <td nowrap><tt>-dur <i>nr</i></tt>
+  <td>Note duration increment factor, default: 1.0<br>
+  Use a bigger value if also fast notes must be handled correctly. 
+</tr>
+<tr>
+  <td><tt>-es</tt>
+  <td>Use each sample. Samples/note-duration factor such that each valid sample yields 1 note unit.
+</tr>
+<tr>
+  <td nowrap><tt>-signs hi|lo</tt>
+  <td>Preference for sharp or flat accidentals in output score file.
+</tr>
+</table>
+<p>
+The manually found frequencies can be stored in a configuration file (with 
+extension <tt>.w2s</tt>), by clicking the <b>write config file</b> button.
+This config file will be read automatically when you process the same wave file
+later. You don't have to supply parameters then, because the stored values
+in the config file take precedence. If you want to try different values, then
+modify them in the config file.<br>
+This feature is not available in command-line mode.
+<p>
+Don't expect wonders from Wav2score. For most wave files you will have to try
+different values for the -win and -th options. In case of fast notes a longer -dur
+value will be needed. In the FFT WINDOW panel 3 or 4 full waves must be visible
+in order to get the right frequency.
+Usually the generated score file will need heavy editing to be useful, especially
+if you only whistled or hummed the tune. Manually inserting frequencies takes a lot
+of patience, but is doable. A big data-window size (e.g. <tt>-win 8000</tt>) means
+less work to do.
+
+<a name="abcm2ps">
+<h2>Abcm2ps - from ABC file to postscript</h2></a>
+Also provided is a full-blown translator from files in the ABC format towards
+human-readable scores in postscript.
+There are thousands of ABC files available on the internet. The nice thing about the
+ABC format is that it is user- as well as computer-readable.
+To learn more about Abcm2ps you can
+visit <a href="http://moinejf.free.fr/">http://moinejf.free.fr/</a>.
+<p>
+The dimensions
+of the generated score notes are controlled by a format file.
+A different format file can be specified by calling Abcm2ps with option -F.
+<p>
+The original Abcm2ps source files were ported to C++ and simplified somewhat. Options can be seen
+by calling the program with option -h. A couple of format files is provided in the
+src-abcm2ps directory. The values in file <tt>default.fmt</tt> are equal to the built-in default
+values of this Abcm2ps version.
+<p>
+To get an impression of what's possible, we show the rendering of an organ concerto,
+file <tt>org-concerto.scr</tt> from the distribution. The start of the generated,
+unmodified ABC file and its result are as follows:
+<p>
+<table border=1 bgcolor="white">
+<tr><td>
+<pre>
+X:1
+T:org-concerto
+M:4/4
+L:1/16
+K:F
+%%staves [(4 5 6) (13 14) 16]
+V:4 nm="red-0" clef=treble
+V:13 nm="purple-0" clef=treble
+V:16 nm="brown-0" clef=treble
+V:4
+[K:F]z8[F2F,2][A2A,2]....
+</pre>
+<tr><td><img src="org-conc1.png">
+</table>
+<p>
+After modifying the .abc file we get the following:
+<p>
+<table border=1 bgcolor="white">
+<tr><td>
+<pre>
+X:1
+T:Haendel - Concerto for Organ and Orchestra - Opus 4 nr 4
+M:4/4
+L:1/16
+K:F
+%%staves [(13 14) 16 (4 5 6)]
+V:4 nm=Violini clef=treble
+V:13 nm=Organo1 clef=treble
+V:16 nm=Organo2 clef=bass
+V:4
+[K:F]z8[F2F,2][A2A,2]...
+</pre>
+<tr><td><img src="org-conc2.png"></center>
+</table>
+<p>
+A <a href="#out-par">script command</a> <b>single-voice</b> is available, especially to extract separate
+voices from a multi-voice score. Use this command to generate an <tt>.abc</tt>
+file, then use this file with a customized header as input for the Abcm2ps tool. If you know how
+to write shell scripts then it's possible to generate the scores for all musicians
+of an orchestra with one single shell command.
+
+<a name="tr-sco">
+<h2>Tr-sco - transform a score file</h2></a>
+This command-line app is for modifying an existing score file. The duration of the notes
+can be modified: halved, doubled, or quantitized. Usage:
+<pre>
+   tr-sco &lt;option&gt; &lt;score-file&gt;
+</pre>
+where &lt;option&gt; is:
+<table class="opt-list">
+<tr>
+  <td><tt>-trh</tt>
+  <td>Notes are halved.
+</tr>
+<tr>
+  <td><tt>-trd</tt>
+  <td>Notes are doubled.
+</tr>
+<tr>
+  <td><tt>-trq</tt>
+  <td>Start- and end delays are omitted.
+</tr>
+<tr>
+  <td><tt>-trs <i>n</i></tt>
+  <td>Notes are shifted <i>n</i> semi-tones. Accidentals will be flat's.
+</tr>
+<tr>
+  <td><tt>-hi</tt>
+  <td>With option -trs, accidentals will be sharp's.
+</tr>
+</table>
+<p>
+The output file is always the same: <tt>tr.sco</tt>
+
+<a name="issues">
+<h1>Issues</h1></a>
+<h2>Scared of the command line?</h2>
+With some restrictions, Amuc can be run from the desktop, not using a terminal.
+If you installed the app from a binary package (e.g. amuc_1.7-1_i386.deb for Debian or Ubuntu)
+then a 'desktop file' is available: /usr/share/applications/amuc.desktop.
+Using your File Manager you can drag its icon to the desktop or to the panel.
+<p>
+A second option is to go with the File Manager to a directory where .sco and .src files
+are located (demo files are in /usr/share/amuc/amuc-tunes). 
+These files have MIME-type text/plain. E.g. using<br><tt>nautilus --no-desktop .</tt><br> you can
+make this type of file, with extension .scr or .sco, to be opened by Amuc. If nautilus is
+already running, then you can click with the right mouse button on the file icon.
+<p>
+It's not useful to run companion tools Wav2score and Abcm2ps this way, as they need
+several command-line options to do their job.
+
+<a name="hardw">
+<h2>Hardware requirements</h2>
+Real-time sound generation needs a lot of
+processing power. When too much voices are active at the same moment
+the computer might be unable to perform all calculations in time, resulting in
+gaps in the generated sound. However, this will happen only with an old, slow computer.
+<p>
+The maximum number of voices that can sound at the same moment is 50.
+If this number is exceeded then a warning is issued. Notice that a note
+that is in its decaying phase still occupies a voice, so if short decay values
+are choosen then more notes can play together.
+
+<a name="the gui">
+<h2>The GUI</h2></a>
+As you may have noticed, the graphical user interface is not very standard,
+which may be a hurdle for new users. However, the app and its interface is intended for "power users".
+Composing music is not an easy endeavour, and getting used to an uncommon GUI
+should be the easy part of the job.
+<p>
+If you want to do something that's not possible, then simply nothing happens. If you quit
+the app after extensive modifications of the tunes without hitting the save butten,
+then no warning whatsoever will stop you.
+
+<a name="quality">
+<h2>Musical quality</h2></a>
+To be honest, it is clear that a lot more control of musical content
+would be needed to create a really pleasant listening experience. In big
+commercial apps like Cubase or Logic this control is available, but deploying it takes
+much time, taste and planning. Listening to
+a human jazz ensemble will make clear that this musical beauty never will be
+reached artificially. Certain types of music however can sound really good,
+listen for example to the organ concerto from the Amuc distribution.
+<p>
+However, Amuc is especially fit for trying out musical ideas, and for experimenting
+with different sounds and combinations thereoff. After automatic translation
+towards regular music scores, a composed piece could be played by real musicians.
+You will notice however that preparing a piece to be played by humans usually
+involves a rewrite, because the timing of the notes must be simplified in order to avoid
+many dotted notes, and also the instruments will have to be reallocated in order
+to match the possibilities of real instruments.
+<p>
+If you cannot read scores or you do not know the fundamentals of harmony then Amuc
+probably is of little use for you. However, the art of composing is something that
+can be learned. A very good and practical book about composing, especially jazz and pop:
+<blockquote>
+Jazz Composition and Arranging<br>
+Author: Tom Boras<br>
+Publisher: Thomson Schirmer<br>
+ISBN 0-534-25261-3
+</blockquote>
+Also on-line several tutorials can be found. A great source of knowledge is
+at <a href="http://www.dolmetsch.com/theoryintro.htm">www.dolmetsch.com</a>.
+<p>
+<hr width="70%">
+</body>
+</html>

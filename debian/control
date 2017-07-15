@@ -1,0 +1,23 @@
+Package: amuc
+Version: 1.7-1
+Section: sound
+Priority: optional
+Architecture: i386
+Depends: libgcc1, libc6, libasound2, libcairo2, libjack0
+Maintainer: W Boeke <w.boeke@chello.nl>
+Description: The Amsterdam Music Composer
+ Amuc is a Linux application for composing and playing music.
+ It works as follows:
+ .
+ Tune fragments are entered graphically. These are combined into a complete
+ tune by means of a script file.
+ Tunes can be exported as WAVE or MIDI files, or as human-readable scores
+ in postscript format.
+ MIDI files can be imported.
+ WAVE files can be imported and transformed to notes.
+ Samples (e.g. for percussion instruments) can be read from WAVE files.
+ Support for USB keyboard.
+ Five-bar staff or piano roll display.
+ For the inexperienced composer there is help available with scales and chords.
+ .
+Homepage: http://members.chello.nl/w.boeke/amuc/index.html

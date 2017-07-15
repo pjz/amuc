@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Amuc
+GenericName=the Amsterdam Music Composer
+Comment=A program for music composition
+Icon=amuc-icon
+#Icon=/usr/share/pixmaps/amuc-icon.png
+Exec=amuc
+Terminal=false
+MimeType=text/plain;
+Categories=AudioVideo;

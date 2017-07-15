@@ -1,0 +1,162 @@
+This is Amuc - the Amsterdam Music Composer, version 1.7
+Last updated: jan 10, 2009
+
+Latest version of this software is available from Amuc's home page:
+  http://members.chello.nl/w.boeke/amuc/index.html
+It is also at sourceforge:
+  https://sourceforge.net/projects/amuc
+however there it is updated less frequently.
+
+Compiling
+=========
+Should pose no problems on any modern Linux system. First run:
+  ./configure
+
+This very basic configure script only tests whether the library and include
+files for x11, alsa, xft, cairo and jack are present on your system.
+
+Then issue:
+  make
+
+Four programs will be created:
+in directory src: amuc,
+in src-abcm2ps: abcm2ps (to create human-readable scores in postscript),
+in src-wav2score: wav2score (to create score files from audio),
+in src-tr-sco: tr-sco (to modify score files).
+
+Located in the src directory is a tune called 'dance'. After successful
+compilation you can try it:
+  ./amuc dance.scr
+
+To hear the tune, click the 'play' button at the right.
+
+If you start the app with option -h, you'll get a short usage message.
+
+Install
+=======
+To install Amuc, type (as root):
+  make install
+This will copy:
+  To /usr/bin:
+    amuc,
+    abcm2ps,
+    wav2score,
+    tr-sco.
+  To /usr/share/amuc:
+    monosynth-patches (patches for the mono synthesizers),
+    chords-and-scales (for the 'chords' window).
+  To /usr/share/amuc/samples:
+    wave files (for the sampled instruments),
+  To /usr/share/amuc/doc:
+    amuc-man.html + pictures
+  To /usr/share/man/man1:
+    amuc.1
+
+The executables also can be installed using symlinks. In this case issue
+command:
+  make links
+
+If the program is started for the first time, then a configuration
+file .amucrc will be created in your home directory. You can modify it,
+it will be read when you start Amuc the next time.
+
+No C++ compiler?
+================
+Without a compiler and development libraries you won't come very far.
+For Ubuntu you can install them by:
+  sudo aptitude install \
+    build-essential libasound2-dev libx11-dev libfreetype6-dev libxft-dev
+
+Demo's
+======
+In the tunes directory there are some more demo's:
+
+   rising.scr		- featuring sampled percussion
+   how-low.scr		- featuring builtin instruments
+   how-synth.scr	- featuring mono synthesizers
+   org-concerto.scr	- first part of Haendel's organ concerto opus 4, nr 4
+
+Creating a Debian package
+=========================
+Read the README file in directory 'debian'.
+
+Source files
+============
+The following C++ files form the main program, amuc.
+   src/amuc.cpp			- the main program
+   src/str.cpp			- general string handling
+   src/x-widgets.cpp		- the gui components
+   src/sound.cpp		- everything to create sound
+   src/dump-wav.cpp		- WAVE file creation
+   src/midi-out.cpp		- MIDI file creation
+   src/read-wav.cpp		- read wave files for sampled instruments
+   src/snd-interface.cpp	- interface to alsa sound drivers and jack deamon 
+   src/midi-keyb.cpp		- interface for MIDI keyboard, read from /dev/midi
+   src/midi-in.cpp		- to read MIDI files
+   src/chords.cpp		- the chords window
+The following files are GPL'ed:
+   physical-mod.cpp		- physical models for sampled instruments
+   src-abcm2ps/*.cpp		- files for lib abc2ps.a and program abcm2ps
+   mono-synth.cpp               - mono synthesizer
+   src-wav2score/*.cpp		- create score from wave file
+
+Documentation
+=============
+The doc directory contains a manual, file amuc-man.html.
+This can also be accessed via the 'Help' menu.
+
+Postscript output
+=================
+Beautiful traditional scores can be printed from generated postscript 
+files. Also output in ABC format is provided, which can be edited if
+needed, and translated to postscript by abcm2ps (in directory 
+src-abcm2ps). Abcm2ps is a C++ port from a clever program 
+(abcm2ps, version abcm2ps-3.7.21) made by Michael Methfessel.
+Three text files provide information about features, keywords etc.
+General information about ABC notation can be found at:
+   http://staffweb.cms.gre.ac.uk/~c.walshaw/abc/
+
+Default settings for abcm2ps are built-in, see file:
+   src-abcm2ps/format.cpp.
+
+Connecting a USB MIDI keyboard
+==============================
+Modern Linux distribution have built-in support for many MIDI keyboards.
+They can be accessed e.g. via /dev/midi1. To check this, look if such a
+file exists after you switched on a MIDI keyboard. To check whether
+MIDI messages are transferred, try
+  cat /dev/midi1
+Then output should appear on the screen when you play some notes.
+
+Also a connection via Jack is possible. This choice can be made in the
+~/.amucrc configuration file.
+
+Modification history
+====================
+NB! This app is updated now and then (to add a feature or to remove a bug),
+but doesn't get a new version number each time.
+
+Version 1.7 - last update: febr 2009
+  - Wav2score: options modified.
+  - Code has been adapted to the newest gcc compiler (version 4.3.2) which is
+    very strict regarding type checking.
+  - Mono-synth: modified controls, modified patch-control string (but older patches
+    stil work).
+  - Support for Jack.
+  - 'libusb' connection with Midi keyboard omitted, connection via Jack provided.
+  - Anti-aliased graphics.
+  - Options -trh etc. handled by new app: tr-sco.
+
+Version 1.6 - last update: july 2008
+Version 1.5 - last update: nov 2007
+Version 1.4 - july 2007
+Version 1.3 - dec 2006
+Version 1.2 - jan 2006
+Version 1.1 - sept 2005
+Version 1.0 - april 2005
+
+----------------------------------------------------------------------------
+Good luck.
+
+Wouter Boeke
+w.boeke@chello.nl

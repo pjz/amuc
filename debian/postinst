@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ $1 = "configure" ] && [ ! -z `which update-menus` ]
+then
+        update-menus
+fi
